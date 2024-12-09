@@ -1,9 +1,5 @@
 from pulp import LpProblem, LpMaximize, LpVariable, lpSum
 
-
-# Firma A Dynamisch 
-
-
 class CompanyDynamic:
     def __init__(self, name, capacity, cost, base_price, inventory=0):
         self.name = name
@@ -13,6 +9,10 @@ class CompanyDynamic:
         self.inventory = inventory
         self.last_decision = None
         self.buffer_stock = 20
+        # Attribute für Slot-Verteilung
+        self.slots_last_minute = 0
+        self.slots_long_term = 0
+        self.fixed_long_term_percentage = 30  # Initial festgelegter Prozentsatz
 
     def set_buffer_stock(self, new_buffer):
         self.buffer_stock = new_buffer
@@ -20,13 +20,19 @@ class CompanyDynamic:
     def use_strategy(self, strategy, price_B_early, price_B_last, market):
         # Strategie aufrufen, um die optimale Entscheidung zu treffen
         result = strategy.optimize_decision(self, price_B_early, price_B_last, market)
-        # result = (pe, pl, prodA, invA, profit, dA_early, dA_lm)
+        # Ergebnis speichern
         self.last_decision = result
-        pe, pl, prodA, invA, profit, dA_early, dA_lm = result
+        (
+            pe, pl, total_prod, invA, profit, dA_early, dA_lm,
+            slots_last_minute, slots_long_term, fixed_percentage
+        ) = result
         self.inventory = invA
         self.base_price = pe
+        # Slot-Daten speichern
+        self.slots_last_minute = slots_last_minute
+        self.slots_long_term = slots_long_term
+        self.fixed_long_term_percentage = fixed_percentage
 
-#Firma B statisch 
 
 class CompanyStatic:
     def __init__(self, name, capacity, cost, base_price):

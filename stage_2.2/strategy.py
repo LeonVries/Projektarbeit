@@ -1,11 +1,44 @@
 from pulp import LpProblem, LpMaximize, LpVariable, lpSum
 import numpy as np
 
+#Hier eigentliche Optimierungsstrategie des UN:
+
+'''
+### **1. Unternehmen A: `StrategyDynamic`**
+
+Ziel: Maximierung des Gewinns durch Preisbedingte Steuerung der Produktionsauslastung durch optimale Festlegung von Frühbucher- und Last-Minute-Preisen unter Berücksichtigung von Nachfrage, Produktionskapazität und Lagerbeständen.
+
+Funktionsweise:
+
+1. **Preis-Kombinationen generieren:**
+   - **Frühbucher-Preise (`early_price_candidates`)** und **Last-Minute-Preise (`last_price_candidates`)** werden kombiniert.
+   - Für jede Kombination wird die Nachfrage (`dA_early`, `dA_lm`) basierend auf den Preisen berechnet (`market.generate_demands`).
+
+2. 
+   - **Entscheidungsvariablen:**
+     - **Binäre Variablen (`x[i]`):** Wählen ein spezifisches Preis-Szenario (1 = gewählt, 0 = nicht gewählt).
+     - **Kontinuierliche Variablen:**
+       - **Produktion (`prod`):** Produktionsmenge.
+       - **Endlagerbestand (`inv_end`):** Lagerbestand am Periodenende.
+   
+   - **Einschränkungen:**
+     - **Ein Szenario wählen:** Summe der `x[i]`-Variablen muss 1 sein.
+     - **Produktionskapazität:** `prod` darf die maximale Kapazität nicht überschreiten.
+     - **Nachfrage decken:** Für das gewählte Szenario muss die gesamte Nachfrage durch Produktion und Lagerbestand gedeckt sein.
+     - **Lagerbestandspuffer:** `inv_end` muss mindestens einen festgelegten Pufferwert erreichen.
+
+   - **Zielfunktion:**
+     - **Gewinn maximieren:** Differenz zwischen Einnahmen (aus Verkäufen) und Gesamtkosten (Fixkosten, variable Produktionskosten, Lagerhaltungskosten).
+
+3. **Modell lösen und Ergebnisse interpretieren:**
+   - Der LP-Solver bestimmt die optimale Preis-Kombination und die entsprechende Produktionsmenge sowie den Endlagerbestand.
+   - Rückgabe der gewählten Preise (`pe`, `pl`), Produktionsmenge (`prod`), Endlagerbestand (`inv_end`) und des erzielten Gewinns.
+
+
+'''
+
 class StrategyDynamic:
-    """
-    Komplexe Optimierungsstrategie für Stufe 3:
-    Wählt aus verschiedenen Preis-Kombinationen (Frühbucher/Last-Minute) das beste Szenario.
-    """
+
     def __init__(self, early_price_candidates=[60, 80, 100, 120, 140],
                  last_price_candidates=[80, 120, 160, 200]):
         self.early_price_candidates = early_price_candidates
@@ -69,10 +102,7 @@ class StrategyDynamic:
 
 
 class StrategyStatic:
-    """
-    Einfache, adaptive Strategie für Unternehmen B:
-    Passt den Preis leicht an basierend auf der Konkurrenz.
-    """
+
     def __init__(self, max_adjustment=0.05):
         self.max_adjustment = max_adjustment  # maximale Anpassung (z.B. 5%)
 

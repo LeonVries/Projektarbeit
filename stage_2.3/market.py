@@ -1,10 +1,5 @@
 import numpy as np
 
-#Hier wird die allgemeine Nachfrage simuliert gestaffelt in Normale Nachfrage und spontane Nachfrage
-#Alles mit entsprechechender generischer Elastizität & Schwankung hinterlegt
-#Externe Schocks möglich aber hier noch nicht integriert 
-
-
 class Market:
     def __init__(self, 
                  early_price_sensitivity=3.0, 

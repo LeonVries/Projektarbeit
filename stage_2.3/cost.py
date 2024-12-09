@@ -1,11 +1,5 @@
 import numpy as np
 
-
-#Hier dzt. nur fixe kosten; Allgmeine Variable Kosten und explizit als Bsp. noch einmal Materialpreise die ebenfalls alle schwanken
-#Möglichkeit zb Rohstoffknappheit zu ergänzen, oder Lieferanten Kappa limitieren
-#Ebenfalls Krisen integrierbar
-
-
 class Cost:
     def __init__(self, fixed_cost, marginal_cost, raw_material_price=10, inventory_holding_cost=2):
         self.fixed_cost = fixed_cost
