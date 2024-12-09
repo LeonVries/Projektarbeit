@@ -1,6 +1,13 @@
+# Dynamisches Bertrand-Duopol Modell
+
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradueller Preisanpassung und realistischer Marktaufteilung.
+
 # Markt-Simulationsprojekt: Erweiterte Bertrand-Wettbewerbsmodelle
 
-## Inhaltsverzeichnis
+## 📝 Inhaltsverzeichnis
 
 - [Einleitung](#einleitung)
   - [Projektstruktur nach VDI 3633](#projektstruktur-nach-vdi-3633)
@@ -84,11 +91,11 @@
 - [Abschluss](#abschluss)
 - [Autor](#autor)
 
-## Einleitung
+## 🎯 Überblick
 
 Dieses Projekt zielt darauf ab, umfassende und erweiterte Modelle des Bertrand-Wettbewerbs zu entwickeln und zu simulieren. Der Projektaufbau orientiert sich an der VDI-Richtlinie 3633, welche eine strukturierte Vorgehensweise für technische Projekte bietet. Durch die Durcharbeitung von drei Evolutionsstufen wird eine zunehmende Komplexität und Realitätsnähe der Modelle erreicht, um realistische Marktbedingungen und strategische Interaktionen zwischen Unternehmen zu simulieren.
 
-### Projektstruktur nach VDI 3633
+### 📦 Projektstruktur nach VDI 3633
 
 Die VDI 3633 unterteilt Projekte in mehrere Phasen, die hier adaptiert wurden:
 
@@ -109,7 +116,7 @@ Die VDI 3633 unterteilt Projekte in mehrere Phasen, die hier adaptiert wurden:
    - Erstellung der Dokumentation
    - Abschlussbericht
 
-## Ausgangssituation und Ziel
+## 🎯 Ausgangssituation und Ziel
 
 ### Ausgangssituation
 
