@@ -1,3 +1,4 @@
+```markdown
 # Markt-Simulationsprojekt: Erweiterte Bertrand-Wettbewerbsmodelle
 
 ## Inhaltsverzeichnis
@@ -30,6 +31,9 @@
     - [Nutzung](#nutzung)
       - [Beispielcode](#beispielcode)
     - [Implementierung der Klassen](#implementierung-der-klassens)
+      - [1. Company Klasse (company.py)](#1-company-klasse-companypy)
+      - [2. Market Klasse (market.py)](#2-market-klasse-marketpy)
+      - [3. Simulation Klasse (simulation.py)](#3-simulation-klasse-simulationpy)
   - [Evolutionsstufe 1: Erweiterte Wettbewerbsmarktsimulation](#evolutionsstufe-1-erweiterte-wettbewerbsmarktsimulation)
     - [Übersicht](#übersicht)
     - [Wissenschaftlicher Hintergrund](#wissenschaftlicher-hintergrund)
@@ -48,13 +52,13 @@
     - [Systemarchitektur](#systemarchitektur)
       - [Kernkomponenten](#kernkomponenten)
       - [Detaillierte Klassen- und Attributreferenz](#detaillierte-klassen--und-attributreferenz)
-        - [Market Klasse (market.py)](#market-klasse-marketpy-1)
-        - [Cost Klasse (cost.py)](#cost-klasse-costpy)
-        - [CompanyDynamic Klasse (company.py)](#companydynamic-klasse-companypy)
-        - [CompanyStatic Klasse (company.py)](#companystatic-klasse-companypy)
-        - [StrategyDynamic Klasse (strategy.py)](#strategydynamic-klasse-strategypy)
-        - [StrategyStatic Klasse (strategy.py)](#strategystatic-klasse-strategypy)
-        - [Simulation Klasse (simulation.py)](#simulation-klasse-simulationpy-1)
+        - [1. Market Klasse (market.py)](#1-market-klasse-marketpy)
+        - [2. Cost Klasse (cost.py)](#2-cost-klasse-costpy)
+        - [3. CompanyDynamic Klasse (company.py)](#3-companydynamic-klasse-companypy)
+        - [4. CompanyStatic Klasse (company.py)](#4-companystatic-klasse-companypy)
+        - [5. StrategyDynamic Klasse (strategy.py)](#5-strategydynamic-klasse-strategypy)
+        - [6. StrategyStatic Klasse (strategy.py)](#6-strategystatic-klasse-strategypy)
+        - [7. Simulation Klasse (simulation.py)](#7-simulation-klasse-simulationpy)
     - [Mathematische Grundlagen](#mathematische-grundlagen-1)
       - [Marktanteilsberechnung](#marktanteilsberechnung)
       - [Nachfragemodell](#nachfragemodell)
@@ -169,7 +173,7 @@ Ein Nash-Gleichgewicht stellt einen Zustand dar, in dem keine Firma einseitig ih
                         +---------------+
                         | + reaction_price() |
                         +---------------+
-
+```
 
 ##### Company Klasse (company.py)
 
@@ -422,14 +426,13 @@ Während das klassische Bertrand-Modell statische Preisstrategien und einfache M
 
 Die Vergleichsanalyse zwischen dem klassischen und dem erweiterten Bertrand-Modell erfolgt in dieser Evolutionsstufe und umfasst folgende Aspekte:
 
-| **Aspekt**               | **Klassisches Modell**               | **Erweitertes Modell**                                  |
-|--------------------------|--------------------------------------|---------------------------------------------------------|
-| Marktzuweisung           | Binär (Gewinner nimmt alles)         | Kontinuierlich mit logistischer Funktion                |
-| Preisadjustierung        | Statisch                             | Dynamisch (Anpassungen pro Zyklus)                      |
-| Nash-Gleichgewicht       | Einmalige Berechnung                 | Iterative Annäherung über Zeit                          |
-| Marktdynamik             | Statisch                             | Dynamische zeitliche Entwicklung                       |
-| Realismus                | Gering                               | Höher durch realistische Annahmen                      |
-| Simulationsdynamik       |                                      |                                                         |
+| **Aspekt**        | **Klassisches Modell**          | **Erweitertes Modell**                            |
+|-------------------|----------------------------------|---------------------------------------------------|
+| Marktzuweisung    | Binär (Gewinner nimmt alles)     | Kontinuierlich mit logistischer Funktion          |
+| Preisadjustierung | Statisch                         | Dynamisch (Anpassungen pro Zyklus)                |
+| Nash-Gleichgewicht| Einmalige Berechnung             | Iterative Annäherung über Zeit                    |
+| Marktdynamik      | Statisch                         | Dynamische zeitliche Entwicklung                 |
+| Realismus         | Gering                           | Höher durch realistische Annahmen                |
 
 #### Simulationsdynamik
 
@@ -544,10 +547,10 @@ Diese Evolutionsstufe präsentiert einen innovativen Ansatz zur dynamischen Prei
 
 Der Kern wissenschaftlicher Beitrag dieser Forschung liegt in der dynamischen Zuordnung der Produktionskapazität zu Preisstrategien. Traditionelle Produktionsmodelle behandeln die Kapazität oft als statische Einschränkung, während diese Simulation einen neuartigen Mechanismus einführt:
 
-- **Adaptive Preis-Kapazitäts-Kopplung:**  
-  Produktionsslots werden basierend auf prognostizierter Marktnachfrage dynamisch zugewiesen.  
-  Preise dienen als strategisches Hebel für die Kapazitätsauslastung.  
-  Echtzeit-Nachfrageelastizität beeinflusst Produktionsentscheidungen.
+- **Adaptive Preis-Kapazitäts-Kopplung**
+  - Produktionsslots werden basierend auf prognostizierter Marktnachfrage dynamisch zugewiesen.
+  - Preise dienen als strategisches Hebel für die Kapazitätsauslastung.
+  - Echtzeit-Nachfrageelastizität beeinflusst Produktionsentscheidungen.
 
 ##### Probabilistische Nachfragemodellierung
 
@@ -741,7 +744,7 @@ Orchestriert die Interaktion zwischen allen Komponenten über mehrere Zeiteinhei
 Der Marktanteil wird durch eine logistische Funktion des Preisunterschieds bestimmt:
 
 $$
-share_A = \frac{1}{1 + e^{-sensitivity \times price\_diff}}
+share\_A = \frac{1}{1 + e^{-sensitivity \times price\_diff}}
 $$
 
 **Eigenschaften der logistischen Transformation:**
@@ -920,5 +923,4 @@ Für weitere Informationen, Fragen oder Beiträge stehen wir Ihnen gerne zur Ver
 ## Autor
 
 **Leon de Vries**
-
 ```
