@@ -1,669 +1,925 @@
-# Evolutionsstufe 0
+```markdown
+# Markt-Simulationsprojekt: Erweiterte Bertrand-Wettbewerbsmodelle
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## Inhaltsverzeichnis
 
-## Historical and Theoretical Origins
+- [Einleitung](#einleitung)
+  - [Projektstruktur nach VDI 3633](#projektstruktur-nach-vdi-3633)
+- [Ausgangssituation und Ziel](#ausgangssituation-und-ziel)
+  - [Ausgangssituation](#ausgangssituation)
+  - [Ziel](#ziel)
+- [Projekt-Roadmap](#projekt-roadmap)
+  - [Evolutionsstufe 0](#evolutionsstufe-0)
+  - [Evolutionsstufe 1](#evolutionsstufe-1)
+  - [Evolutionsstufe 2](#evolutionsstufe-2)
+- [Detaillierte Modellbeschreibungen](#detaillierte-modellbeschreibungen)
+  - [Evolutionsstufe 0: Markt-Simulation](#evolutionsstufe-0-markt-simulation)
+    - [Überblick](#überblick)
+    - [Theoretischer Hintergrund](#theoretischer-hintergrund)
+      - [Bertrand-Wettbewerbsmodell](#bertrand-wettbewerbsmodell)
+      - [Nash-Gleichgewicht](#nash-gleichgewicht)
+    - [Projektstruktur](#projektstruktur)
+      - [Klassendiagramm](#klassendiagramm)
+      - [Company Klasse (company.py)](#company-klasse-companypy)
+      - [Market Klasse (market.py)](#market-klasse-marketpy)
+      - [Simulation Klasse (simulation.py)](#simulation-klasse-simulationpy)
+    - [Mathematische Grundlagen](#mathematische-grundlagen)
+      - [Lineare Nachfragefunktion](#lineare-nachfragefunktion)
+    - [Simulationsparameter](#simulationsparameter)
+    - [Potenzielle Erweiterungen und Forschungsrichtungen](#potenzielle-erweiterungen-und-forschungsrichtungen)
+    - [Anforderungen](#anforderungen)
+    - [Nutzung](#nutzung)
+      - [Beispielcode](#beispielcode)
+    - [Implementierung der Klassen](#implementierung-der-klassens)
+  - [Evolutionsstufe 1: Erweiterte Wettbewerbsmarktsimulation](#evolutionsstufe-1-erweiterte-wettbewerbsmarktsimulation)
+    - [Übersicht](#übersicht)
+    - [Wissenschaftlicher Hintergrund](#wissenschaftlicher-hintergrund)
+      - [Erweiterung des Bertrand-Wettbewerbsmodells](#erweiterung-des-bertrand-wettbewerbsmodells)
+    - [Projektstruktur](#projektstruktur-1)
+      - [Klassenübersicht](#klassenübersicht)
+      - [Vergleichsanalyse](#vergleichsanalyse)
+      - [Simulationsdynamik](#simulationsdynamik)
+    - [Visualisierung](#visualisierung-1)
+    - [Implementierung der erweiterten Klassen](#implementierung-der-erweiterten-klassens)
+  - [Evolutionsstufe 2: Dynamisches Preis- und Produktionsoptimierungsmodell](#evolutionsstufe-2-dynamisches-preis--und-produktionsoptimierungsmodell)
+    - [Übersicht](#übersicht-1)
+    - [Theoretischer Hintergrund](#theoretischer-hintergrund-1)
+      - [Wissenschaftliche Innovation: Dynamische Produktionsslot-Planung](#wissenschaftliche-innovation-dynamische-produktionsslot-planung)
+      - [Probabilistische Nachfragemodellierung](#probabilistische-nachfragemodellierung)
+    - [Systemarchitektur](#systemarchitektur)
+      - [Kernkomponenten](#kernkomponenten)
+      - [Detaillierte Klassen- und Attributreferenz](#detaillierte-klassen--und-attributreferenz)
+        - [Market Klasse (market.py)](#market-klasse-marketpy-1)
+        - [Cost Klasse (cost.py)](#cost-klasse-costpy)
+        - [CompanyDynamic Klasse (company.py)](#companydynamic-klasse-companypy)
+        - [CompanyStatic Klasse (company.py)](#companystatic-klasse-companypy)
+        - [StrategyDynamic Klasse (strategy.py)](#strategydynamic-klasse-strategypy)
+        - [StrategyStatic Klasse (strategy.py)](#strategystatic-klasse-strategypy)
+        - [Simulation Klasse (simulation.py)](#simulation-klasse-simulationpy-1)
+    - [Mathematische Grundlagen](#mathematische-grundlagen-1)
+      - [Marktanteilsberechnung](#marktanteilsberechnung)
+      - [Nachfragemodell](#nachfragemodell)
+    - [Schlüsselinnovationen](#schlüsselinnovationen)
+    - [Leistungskennzahlen](#leistungskennzahlen)
+    - [Nutzung](#nutzung-1)
+      - [Voraussetzungen](#voraussetzungen)
+      - [Simulation Ausführen](#simulation-ausführen)
+      - [Visualisierung](#visualisierung-2)
+      - [Konfigurationsoptionen](#konfigurationsoptionen)
+    - [Zukünftige Forschungsrichtungen](#zukünftige-forschungsrichtungen)
+    - [Einschränkungen](#einschränkungen)
+- [Wechselwirkungen](#wechselwirkungen)
+  - [Interaktion zwischen Komponenten](#interaktion-zwischen-komponenten)
+  - [Datenfluss](#datenfluss)
+  - [Abhängigkeiten](#abhängigkeiten)
+  - [UML-Diagramm Hinweis](#uml-diagramm-hinweis)
+- [Installation](#installation)
+- [Nutzung](#nutzung-2)
+  - [Beispielcode](#beispielcode-1)
+- [Lizenz](#lizenz)
+- [Beitragende](#beitragende)
+- [Kontakt](#kontakt)
+- [Abschluss](#abschluss)
+- [Autor](#autor)
 
-### Joseph Bertrand and the Birth of Competitive Pricing Theory
+## Einleitung
 
-The Bertrand model, developed by French mathematician Joseph Bertrand in 1883, represents a fundamental breakthrough in understanding oligopolistic market dynamics. Published in his review of Antoine Cournot's work "Recherches sur les Principes Mathématiques de la Théorie des Richesses", Bertrand challenged Cournot's assumptions about firm behavior.
+Dieses Projekt zielt darauf ab, umfassende und erweiterte Modelle des Bertrand-Wettbewerbs zu entwickeln und zu simulieren. Der Projektaufbau orientiert sich an der VDI-Richtlinie 3633, welche eine strukturierte Vorgehensweise für technische Projekte bietet. Durch die Durcharbeitung von drei Evolutionsstufen wird eine zunehmende Komplexität und Realitätsnähe der Modelle erreicht, um realistische Marktbedingungen und strategische Interaktionen zwischen Unternehmen zu simulieren.
 
-#### Key Theoretical Contributions
+### Projektstruktur nach VDI 3633
 
-1. **Strategic Price Competition**
-   - Firms compete by setting prices simultaneously
-   - Consumers purchase from the lowest-price producer
-   - Introduces the concept of strategic interdependence
+Die VDI 3633 unterteilt Projekte in mehrere Phasen, die hier adaptiert wurden:
 
-2. **Critical Insights**
-   - Demonstrated that price competition can drive prices to marginal cost
-   - Showed how firms' strategic decisions fundamentally differ from quantity-based competition
-   - Laid groundwork for modern industrial organization theory
+1. **Projektdefinition**
+   - Zielsetzung
+   - Anforderungen
+   - Rahmenbedingungen
+2. **Konzeptentwicklung**
+   - Erstellung der Roadmap
+   - Modellierung der Evolutionsstufen
+3. **Umsetzung**
+   - Implementierung der Modelle
+   - Integration der Komponenten
+   - Test und Validierung
+     - Simulationen durchführen
+     - Ergebnisse analysieren
+4. **Dokumentation und Abschluss**
+   - Erstellung der Dokumentation
+   - Abschlussbericht
 
-### Evolution of the Bertrand Model
+## Ausgangssituation und Ziel
 
-#### Classical Bertrand Model Characteristics
-- **Perfect Competition Assumption**
-  - Identical products
-  - No capacity constraints
-  - Full market information
-  - Instantaneous price adjustments
+### Ausgangssituation
 
-#### Limitations of Classical Model
-- Unrealistic immediate price convergence
-- Binary market allocation
-- Neglects real-world market complexities
+Das klassische Bertrand-Wettbewerbsmodell beschreibt den Preiswettbewerb zwischen zwei Firmen, die identische Produkte anbieten. Obwohl dieses Modell grundlegende Einblicke in oligopolistische Marktstrukturen bietet, weist es mehrere Einschränkungen auf, die seine Anwendbarkeit auf reale Märkte begrenzen. Insbesondere berücksichtigt das klassische Modell keine dynamischen Preisadjustierungen, realistische Marktanteilsverteilungen oder stochastische Elemente in der Nachfrage- und Kostenstruktur.
 
-## 🎯 Project Overview
+### Ziel
 
-This project implements an advanced Bertrand competition model with:
-- Gradual price adjustment mechanisms
-- Realistic market share distribution
-- Dynamic temporal evolution
-- Comprehensive result visualization
+Ziel dieses Projekts ist es, das klassische Bertrand-Modell zu erweitern und zu verfeinern, um realistischere Marktbedingungen und strategische Interaktionen zwischen Unternehmen zu simulieren. Dies umfasst die Einführung dynamischer Preisadjustierungen, realitätsnaher Marktanteilsverteilungen und die Berücksichtigung stochastischer Elemente in der Nachfrage- und Kostenstruktur. Durch die schrittweise Entwicklung in drei Evolutionsstufen soll eine umfassende und flexible Simulationsumgebung geschaffen werden.
 
-## 🔧 Advanced Model Features
+## Projekt-Roadmap
 
-### Innovative Model Characteristics
-- **Continuous Market Share Allocation**
-  - Uses logistic function for smooth market division
-  - Avoids binary "winner-takes-all" approach
+### Evolutionsstufe 0
 
-- **Constrained Price Dynamics**
-  - Maximum 8% price adjustment per time unit
-  - Prevents unrealistic instant price changes
+Grundlegendes Markt-Simulationsmodell mit statischen Preisstrategien und einfacher Berechnung des Nash-Gleichgewichts.
 
-- **Sophisticated Demand Modeling**
-  - Non-linear demand function
-  - Price sensitivity parametrization
-  - Market size considerations
+### Evolutionsstufe 1
 
-## 📐 Mathematical Foundations
+Erweiterung des Modells um dynamische Preisadjustierungen, realistischere Marktanteilsberechnungen und Einführung von Vergleichsanalysen zwischen klassischen und erweiterten Modellen.
 
-### Demand Function
+### Evolutionsstufe 2
 
-The core demand function represents market behavior:
+Vollständig dynamisches Modell mit fortschrittlichen Optimierungsstrategien, stochastischer Nachfrage- und Kostenstruktur sowie umfassender Simulation und Visualisierung der Marktinteraktionen.
 
-\[
-Q(p) = \text{market\_size} \cdot \left(1 - \frac{p}{\text{max\_price}}\right)
-\]
+## Detaillierte Modellbeschreibungen
 
-#### Parameter Interpretation
-- `market_size`: Maximum demand at zero price
-- `max_price`: Price point eliminating all demand
-- Captures non-linear market responsiveness
+### Evolutionsstufe 0: Markt-Simulation
 
-### Price Adjustment Mechanism
+#### Überblick
 
-\[
-p_1(t+1) = \begin{cases} 
-\max(c, p_2(t) \cdot (1 - \delta(t))), & \text{wenn } p_1(t) > p_2(t) \\
-p_1(t), & \text{sonst}
-\end{cases}
-\]
+Dieses Projekt implementiert ein grundlegendes Markt-Simulationsmodell, das die Dynamik des Preiswettbewerbs zwischen zwei Firmen anhand des Bertrand-Modells eines Oligopols untersucht. Die Simulation berechnet die Nash-Gleichgewichte der Preise und visualisiert die strategischen Interaktionen zwischen den konkurrierenden Unternehmen.
 
-With \( \delta(t) \) representing a controlled randomness in price underbidding.
+#### Theoretischer Hintergrund
 
-## 📊 Comparative Analysis
+##### Bertrand-Wettbewerbsmodell
 
-### Classical vs. Dynamic Bertrand Model
+Das Bertrand-Wettbewerbsmodell, entwickelt von Joseph Bertrand im Jahr 1883, ist eine grundlegende ökonomische Theorie, die den Preiswettbewerb zwischen Firmen beschreibt. In diesem Modell:
 
-| Aspect | Classical Model | Dynamic Model |
-|--------|----------------|---------------|
-| **Market Allocation** | Binary (Winner-takes-all) | Continuous |
-| **Price Adjustment** | Instantaneous | Gradual (max 8% per period) |
-| **Nash Equilibrium** | At marginal cost | Approximative, evolving |
-| **Time Dimension** | Static | Explicit temporal dynamics |
+- Firmen konkurrieren durch gleichzeitiges Festsetzen der Preise.
+- Konsumenten kaufen beim Unternehmen mit dem niedrigsten Preis.
+- Alle Firmen produzieren identische Produkte.
+- Firmen haben vollständige Informationen über Marktbedingungen.
 
-## 🧠 Scientific Contributions
+##### Nash-Gleichgewicht
 
-1. Enhanced market competition simulation
-2. More realistic pricing strategies
-3. Improved understanding of oligopolistic interactions
-4. Computational approach to economic modeling
+Ein Nash-Gleichgewicht stellt einen Zustand dar, in dem keine Firma einseitig ihr Ergebnis durch eine Änderung ihrer Strategie verbessern kann. Im Kontext des Preiswettbewerbs bedeutet dies, dass jede Firma ihren optimalen Preis festlegt, gegeben den Preis des Wettbewerbers.
 
-## 💻 Usage Example
+#### Projektstruktur
+
+##### Klassendiagramm
+
+```plaintext
++---------------+       +---------------+       +---------------+
+|    Market     |       |   Company     |       |   Simulation  |
++---------------+       +---------------+       +---------------+
+| - company1    |       | - alpha       |       | - market      |
+| - company2    |       | - beta        |       | - visualization|
++---------------+       | - gamma       |       +---------------+
+| + calculate_nash_equilibrium() | | - marginal_cost|
++---------------+       | - name        |
+                        +---------------+
+                        | + reaction_price() |
+                        +---------------+
+```
+
+##### Company Klasse (company.py)
+
+**Zweck**  
+Repräsentiert eine Firma mit spezifischen Markteigenschaften und strategischem Preisverhalten.
+
+**Wichtige Attribute**
+- `alpha`: Basissachfrageparameter
+- `beta`: Preisempfindlichkeit der eigenen Nachfrage
+- `gamma`: Kreuzpreisempfindlichkeit
+- `marginal_cost`: Kosten für die Produktion einer zusätzlichen Einheit
+- `name`: Kennung für die Firma
+
+**Wichtige Methode: `reaction_price()`**  
+Berechnet die optimale Preisreaktion auf den Preis des Wettbewerbers mittels einer linearen Reaktionsfunktion:
 
 ```python
-from bertrand_dynamics import BertrandDynamics
-
-# Model Initialization
-model = BertrandDynamics(
-    marginal_cost=10,       # Production cost
-    market_size=1000,       # Total market potential
-    max_price=50,           # Maximum feasible price
-    price_sensitivity=2.0   # Demand elasticity
-)
-
-# Simulation
-results = model.simulate(
-    initial_price_1=45,     # Starting price for Firm 1
-    initial_price_2=40,     # Starting price for Firm 2
-    num_periods=50          # Simulation duration
-)
+def reaction_price(self, competitor_price):
+    return (self.alpha + self.beta * self.marginal_cost + self.gamma * competitor_price) / (2 * self.beta)
 ```
 
-## 📦 Installation
+**Wissenschaftlicher Einblick:**  
+Diese Funktion verkörpert die strategische Interdependenz in oligopolistischen Märkten, bei der der optimale Preis einer Firma sowohl von ihren eigenen Eigenschaften als auch von den Preisen des Wettbewerbers abhängt.
 
-```bash
-git clone https://github.com/LeonVries/basic
-cd dynamic-bertrand-model
-pip install numpy matplotlib
-```
+##### Market Klasse (market.py)
 
-## 📄 License
+**Zweck**  
+Berechnet die Nash-Gleichgewichts-Preise für zwei konkurrierende Firmen.
 
-MIT License - See [LICENSE](LICENSE) for details.
+**Wichtige Methode: `calculate_nash_equilibrium()`**  
+**Theoretischer Ansatz:**  
+Löst ein System simultaner linearer Gleichungen.
 
-## 👥 Contribution
+**Mathematische Formulierung:**
+- Erstellt eine 2x2 Matrix `A`, die die interfirmären Preisabhängigkeiten erfasst.
+- Erstellt einen Vektor `b`, der Markt- und Kostenparameter repräsentiert.
+- Verwendet lineare Algebra zur Lösung der Gleichgewichtspreise.
 
-Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
+**Rechnerische Strategie:**
+- Verwendet NumPy's lineare Algebra Solver (`np.linalg.solve`).
+- Bietet eine rechnerisch effiziente Berechnung des Gleichgewichts.
 
-## 📬 Contact
+##### Simulation Klasse (simulation.py)
 
-Leon de Vries
-- Email: mail@leondevries.de
-- Project: [GitHub Repository](https://github.com/LeonVries/basic)
+**Zweck**  
+Orchestriert die Marktinteraktion und visualisiert die Ergebnisse.
 
+**Funktionalität**
+- Initialisiert Firmen- und Marktobjekte.
+- Berechnet die Nash-Gleichgewichts-Preise.
+- Generiert eine Visualisierung der Reaktionsfunktionen.
 
-# Evolutionsstufe 1
+**Methoden**
+- `run()`: Führt die Simulation durch, berechnet die Gleichgewichte und visualisiert die Reaktionsfunktionen.
+- `plot_reaction_functions(equilibrium_prices)`: Erstellt die Visualisierung der Reaktionsfunktionen und markiert das Nash-Gleichgewicht.
 
-# Bertrand Competition Market Simulation
+**Visualisierung**
+- Plottet die Reaktionsfunktionen beider Firmen.
+- Markiert den Punkt des Nash-Gleichgewichts.
+- Bietet grafische Einblicke in strategische Interaktionen.
 
-## Overview
+#### Mathematische Grundlagen
 
-This project simulates a Bertrand competition between two companies, implementing a strategic pricing model based on microeconomic principles of market dynamics and strategic interaction.
+##### Lineare Nachfragefunktion
 
-## Scientific Background
+Das Modell nimmt eine lineare Nachfragefunktion der Form an:
 
-### Bertrand Competition Model
+$$
+Q_i = \alpha - \beta_i \cdot p_i + \gamma \cdot p_j
+$$
 
-The Bertrand competition model, first proposed by Joseph Bertrand in 1883, is a fundamental economic theory describing price competition between firms. Unlike Cournot competition, which focuses on quantity, Bertrand competition centers on price-setting strategies.
+Dabei gilt:
 
-Key characteristics:
-- Firms compete by simultaneously setting prices
-- Consumers purchase from the lowest-price firm
-- Firms aim to maximize profits through strategic pricing
-- In perfect competition, prices converge to marginal cost
+- \( Q_i \): Nachfrage nach Firma \( i \)
+- \( \alpha \): Marktpotenzial
+- \( \beta_i \): Preisempfindlichkeit der eigenen Nachfrage
+- \( \gamma \): Kreuzpreisempfindlichkeit
+- \( p_i \): Preis von Firma \( i \)
+- \( p_j \): Preis des Wettbewerbers
 
-## Project Structure
+#### Simulationsparameter
 
-### Class Breakdown
+Im bereitgestellten Beispiel:
 
-#### 1. `Market` (market.py)
-Represents the market environment with key economic mechanisms:
+- Marktpotenzial (\( \alpha \)): 100
+- Preisempfindlichkeit (\( \beta \)): 10
+- Kreuzpreisempfindlichkeit (\( \gamma \)): 5
+- Grenzkosten: 20
 
-**Attributes:**
-- `market_size`: Total potential market volume
-- `max_price`: Maximum sustainable price point
-- `price_sensitivity`: Elasticity of demand relative to price differences
+#### Potenzielle Erweiterungen und Forschungsrichtungen
 
-**Key Methods:**
-- `market_share(price_a, price_b)`: Calculates market share using a logistic function
-- `demand(price)`: Computes market demand based on price
+- Einführung von Produktdifferenzierung
+- Implementierung dynamischer Preisstrategien
+- Hinzufügen von Nachfrageschwankungen
+- Modellierung von Kapazitätsbeschränkungen
+- Untersuchung von Lernalgorithmen in Wettbewerbsumgebungen
 
-**Scientific Mechanism:**
-The market share is determined by a logistic function, which captures non-linear consumer behavior:
-- Small price differences have minimal impact
-- Significant price differences dramatically shift market share
-- Ensures smooth transition between competing firms
-
-#### 2. `Company` (company.py)
-Represents individual market participants:
-
-**Attributes:**
-- `name`: Identifier for the company
-- `cost`: Cost structure
-- `price`: Current price setting
-
-**Key Methods:**
-- `set_price(price)`: Adjusts company's price
-- `profit(quantity)`: Calculates profit based on price and quantity
-
-**Profit Calculation:**
-Π = (p - c) * Q
-- p: Price
-- c: Marginal Cost
-- Q: Quantity sold
-
-#### 3. `Cost` (cost.py)
-Manages cost structure:
-
-**Attributes:**
-- `marginal_cost`: Constant cost per unit produced
-
-**Method:**
-- `get_marginal_cost()`: Returns marginal cost
-
-#### 4. `BertrandUnderbiddingStrategy` (strategy.py)
-Implements pricing strategy with dynamic adjustment:
-
-**Key Features:**
-- Automatic price underbidding when at a competitive disadvantage
-- Randomized underbidding to simulate market uncertainty
-- Ensures prices never fall below marginal cost
-
-**Strategy Mechanism:**
-1. Compare own price with competitor's price
-2. If higher, reduce price strategically
-3. Use random factor to introduce market variability
-4. Maintain a price floor at marginal cost
-
-#### 5. `Simulation` (simulation.py)
-Orchestrates market interaction and data collection:
-
-**Key Functions:**
-- Run multi-period market simulation
-- Track prices, profits, and market shares
-- Visualize market dynamics
-- Calculate period-by-period economic interactions
-
-## Simulation Dynamics
-
-### Market Share Calculation
-Market share is determined by a logistic function of price difference:
-- Captures non-linear consumer decision-making
-- Smooth transition between competing firms
-- Mathematically represented as: 
-  share_a = 1 / (1 + exp(-price_sensitivity * price_diff))
-
-### Demand Model
-Linear demand function:
-Q = market_size * (1 - price/max_price)
-- Demand decreases as price increases
-- Total market size acts as a scaling factor
-
-## Economic Insights
-
-### Pricing Strategies
-- Dynamic price adjustment
-- Competitive underbidding
-- Maintaining profitability above marginal cost
-
-### Market Equilibrium
-The simulation explores how firms:
-- Respond to competitor pricing
-- Maintain profit margins
-- Adapt to market conditions
-
-## Usage Example
-
-```python
-# Initialize market components
-cost = Cost(marginal_cost=10)
-market = Market(market_size=1000, max_price=50, price_sensitivity=2.0)
-company_a = Company(name='A', cost=cost, initial_price=45)
-company_b = Company(name='B', cost=cost, initial_price=40)
-
-# Create strategies
-strategy_a = BertrandUnderbiddingStrategy()
-strategy_b = BertrandUnderbiddingStrategy()
-
-# Run simulation
-simulation = Simulation(market, company_a, company_b, strategy_a, strategy_b, num_periods=50)
-prices_a, prices_b, profits_a, profits_b, shares_a, shares_b = simulation.run()
-simulation.plot_results(prices_a, prices_b, profits_a, profits_b, shares_a, shares_b)
-```
-
-
-
-# Evolutionsstufe 2 
-
-# Dynamic Pricing and Market Simulation Model
-
-## Overview
-
-This project presents a sophisticated computational model for analyzing dynamic pricing strategies in a competitive market environment. The simulation explores complex interactions between two companies (A and B) using advanced optimization techniques, stochastic demand modeling, and adaptive pricing strategies.
-
-## Scientific Background
-
-### Market Dynamics Modeling
-
-The research is grounded in microeconomic principles of:
-- Price elasticity of demand
-- Market segmentation
-- Strategic decision-making under uncertainty
-- Dynamic optimization
-
-### Key Theoretical Foundations
-
-1. **Demand Elasticity Theory**
-   - Utilizes logistic function for market share calculation
-   - Incorporates price sensitivity parameters
-   - Models non-linear demand responses to price changes
-
-2. **Stochastic Market Modeling**
-   - Employs normal distribution for market size estimation
-   - Introduces randomness to simulate real-world market uncertainties
-   - Allows for dynamic market size and price-dependent demand fluctuations
-
-## System Architecture
-
-### Core Components
-
-# Detailed Class and Attribute Reference
-
-## 1. `Market` Class (`market.py`)
-### Purpose
-Simulates market dynamics, demand generation, and market share allocation.
-
-### Initialization Parameters
-- `early_price_sensitivity` (float, default=3.0): 
-  - Sensitivity of early booking market segment to price changes
-  - Higher value = More dramatic market share shifts based on price
-
-- `last_minute_base_sensitivity` (float, default=1.0):
-  - Sensitivity of last-minute market segment to price changes
-  - Controls how quickly market share changes with price differences
-
-- `early_ratio` (float, default=0.8):
-  - Proportion of total market size allocated to early booking segment
-  - Indicates market's preference for advance purchases
-
-- `last_minute_ratio` (float, default=0.2):
-  - Proportion of total market size for last-minute segment
-  - Represents spontaneous or late purchasing behavior
-
-- `market_size_mean` (int, default=1000):
-  - Average total market size
-  - Serves as base for demand generation
-
-- `market_size_std` (int, default=200):
-  - Standard deviation of market size
-  - Introduces variability in total market demand
-
-### Key Methods
-1. `market_share(price_A, price_B, sensitivity)`:
-   - Calculates market share using logistic transformation
-   - Considers price difference and sensitivity
-   - Returns market share for two competitors
-
-2. `generate_demands(price_A_early, price_B_early, price_A_last, price_B_last)`:
-   - Generates probabilistic demand for early and last-minute segments
-   - Applies price sensitivity and market size variations
-   - Returns demand quantities for both companies
-
-## 2. `Cost` Class (`cost.py`)
-### Purpose
-Manages cost structures with dynamic update mechanisms.
-
-### Initialization Parameters
-- `fixed_cost` (float): 
-  - Constant costs independent of production volume
-  - Represents overhead expenses
-
-- `marginal_cost` (float): 
-  - Variable costs per unit of production
-  - Directly influenced by production volume
-
-- `raw_material_price` (float, default=10):
-  - Cost of raw materials per unit
-  - Reflects supply chain and input cost variations
-
-- `inventory_holding_cost` (float, default=2):
-  - Cost of maintaining inventory
-  - Represents storage, maintenance, and opportunity costs
-
-### Key Methods
-1. `total_unit_cost()`:
-   - Calculates total cost per unit
-   - Combines marginal cost and raw material price
-
-2. `update_fixed_costs(inflation_rate=0.01)`:
-   - Simulates gradual increase in fixed costs
-   - Models economic inflation effects
-
-3. `update_marginal_costs(fluctuation_std=0.05)`:
-   - Introduces stochastic variations in marginal costs
-   - Uses normal distribution for realistic cost changes
-
-4. `update_raw_material_price(fluctuation_std=0.05)`:
-   - Applies random fluctuations to raw material prices
-   - Simulates supply chain and market volatility
-
-## 3. `CompanyDynamic` Class (`company.py`)
-### Purpose
-Represents a sophisticated company with dynamic decision-making capabilities.
-
-### Initialization Parameters
-- `name` (str): Company identifier
-- `capacity` (float): Maximum production capacity
-- `cost` (Cost): Cost structure instance
-- `base_price` (float): Initial pricing strategy
-- `inventory` (float, default=0): Initial inventory level
-- `buffer_stock` (int, default=20): Minimum inventory threshold
-
-### Key Methods
-1. `set_buffer_stock(new_buffer)`:
-   - Dynamically adjusts minimum inventory level
-   - Allows adaptive inventory management strategy
-
-2. `use_strategy(strategy, price_B_early, price_B_last, market)`:
-   - Applies optimization strategy
-   - Considers competitor prices and market conditions
-   - Updates inventory and base price based on strategy outcome
-
-## 4. `CompanyStatic` Class (`company.py`)
-### Purpose
-Represents a more simplistic, reactively pricing company.
-
-### Initialization Parameters
-- `name` (str): Company identifier
-- `capacity` (float): Maximum production capacity
-- `cost` (Cost): Cost structure instance
-- `base_price` (float): Initial pricing strategy
-
-### Key Methods
-1. `simple_decision(dB_early, dB_lm)`:
-   - Makes production and sales decisions
-   - Considers demand and production capacity
-   - Calculates profit based on sales and costs
-
-2. `adjust_price(strategy, competitor_price)`:
-   - Applies adaptive pricing strategy
-   - Responds to competitor's pricing
-   - Ensures price remains above marginal cost
-
-## 5. `StrategyDynamic` Class (`strategy.py`)
-### Purpose
-Implements complex optimization strategy for advanced pricing decisions.
-
-### Initialization Parameters
-- `early_price_candidates` (list, default=[60, 80, 100, 120, 140]):
-  - Potential early booking price options
-  - Provides strategic price exploration
-
-- `last_price_candidates` (list, default=[80, 120, 160, 200]):
-  - Potential last-minute price options
-  - Allows flexible pricing adaptation
-
-### Key Method
-1. `optimize_decision(company, price_B_early, price_B_last, market)`:
-   - Generates multiple price scenarios
-   - Uses linear programming for optimal decision
-   - Considers:
-     * Production capacity
-     * Inventory constraints
-     * Revenue maximization
-     * Demand variability
-
-## 6. `StrategyStatic` Class (`strategy.py`)
-### Purpose
-Provides a simple, adaptive pricing mechanism.
-
-### Initialization Parameters
-- `max_adjustment` (float, default=0.05):
-  - Maximum allowed price change percentage
-  - Prevents extreme pricing fluctuations
-
-### Key Method
-1. `adjust_price(own_price, competitor_price, marginal_cost)`:
-   - Implements price adjustment logic
-   - Compares own price with competitor
-   - Ensures price stays above marginal cost
-   - Introduces slight randomness for market realism
-
-## Interaction Mechanisms
-
-### Price Sensitivity
-- Logistic market share allocation
-- Non-linear demand response
-- Segment-specific elasticity
-
-### Cost Dynamics
-- Stochastic cost updates
-- Inflation and market fluctuation modeling
-- Dynamic marginal cost management
-
-### Strategic Decision Processes
-1. **Company A (Dynamic)**
-   - Complex optimization
-   - Multiple scenario evaluation
-   - Advanced inventory management
-
-2. **Company B (Static)**
-   - Reactive pricing
-   - Simple decision framework
-   - Competitor-based adjustments
-
-## Simulation Workflow
-1. Initialize market parameters
-2. Generate demand scenarios
-3. Apply company-specific strategies
-4. Calculate financial outcomes
-5. Update cost structures
-6. Visualize and analyze results
-
-### Pricing Strategies Detailed
-
-#### Company A: Dynamic Optimization Strategy
-
-**Mechanism:**
-- Uses linear programming (PuLP library) for decision optimization
-- Evaluates multiple price scenarios
-- Considers:
-  - Production capacity constraints
-  - Inventory management
-  - Revenue maximization
-  - Cost minimization
-
-**Key Optimization Variables:**
-- Early and last-minute prices
-- Production volume
-- Ending inventory
-- Demand scenarios
-
-#### Company B: Static Adaptive Strategy
-
-**Mechanism:**
-- Implements marginal price adjustments
-- Responds to competitor's pricing
-- Constraints:
-  - Maximum price adjustment (5%)
-  - Marginal cost floor
-
-## Mathematical Modeling Insights
-
-### Demand Generation Function
-
-```python
-def generate_demands(self, price_A_early, price_B_early, price_A_last, price_B_last):
-    # Stochastic market size generation
-    base_market = np.random.normal(market_size_mean, market_size_std)
-    
-    # Price sensitivity transformations
-    early_factor = 1 - max(0, (avg_price_early - 100) * 0.003)
-    lm_boost = 1 + (100 - avg_price_last) * 0.01
-```
-
-**Key Characteristics:**
-- Non-linear price response
-- Market size volatility
-- Segment-specific demand elasticity
-
-### Market Share Allocation
-
-```python
-def market_share(self, price_A, price_B, sensitivity):
-    price_diff = (price_B - price_A) / ((price_A + price_B)/2 + 1e-9)
-    share_A = 1 / (1 + np.exp(-sensitivity * price_diff))
-```
-
-**Logistic Transformation Properties:**
-- Smooth market share transition
-- Symmetrical response around price parity
-- Continuous probability distribution
-
-## Simulation Workflow
-
-1. Initialize market and company parameters
-2. Run iterative simulation (30 periods)
-3. Generate demand scenarios
-4. Apply pricing strategies
-5. Calculate financial outcomes
-6. Update cost structures
-7. Visualize results
-
-## Performance Metrics
-
-- Cumulative Profit
-- Market Share
-- Price Elasticity
-- Production Efficiency
-- Inventory Management
-
-## Visualization Outputs
-
-The `plot_results()` function generates comprehensive visualizations:
-- Profits per Period
-- Cumulative Profits
-- Pricing Trends
-- Production Utilization
-- Demand Dynamics
-- Market Share Evolution
-- Cost Structures
-
-## Advanced Features
-
-- Randomized buffer stock
-- Incremental cost updates
-- Flexible price candidate ranges
-- Stochastic demand modeling
-
-## Computational Requirements
+#### Anforderungen
 
 - Python 3.8+
 - NumPy
 - Matplotlib
-- PuLP (Linear Programming)
-- Pandas (Result Export)
 
-## Future Research Directions
+#### Nutzung
 
-1. Machine Learning Price Prediction
-2. More Complex Market Segmentation
-3. Multi-period Strategic Modeling
-4. Risk Assessment Frameworks
+```bash
+python simulation.py
+```
 
-## Limitations and Assumptions
+##### Beispielcode
 
-- Simplified market model
-- Limited number of price candidates
-- Deterministic cost progression
-- Binary decision frameworks
+```python
+# Marktkomponenten initialisieren
+company_a = Company(alpha=100, beta=10, gamma=5, marginal_cost=20, name='Firma A')
+company_b = Company(alpha=100, beta=10, gamma=5, marginal_cost=20, name='Firma B')
+market = Market(company1=company_a, company2=company_b)
+
+# Simulation durchführen
+simulation = Simulation(market=market, company1=company_a, company2=company_b)
+simulation.run()
+```
+
+#### Implementierung der Klassen
+
+##### 1. Company Klasse (company.py)
+
+```python
+class Company:
+    def __init__(self, alpha, beta, gamma, marginal_cost, name):
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+        self.marginal_cost = marginal_cost
+        self.name = name
+
+    def reaction_price(self, competitor_price):
+        return (self.alpha + self.beta * self.marginal_cost + self.gamma * competitor_price) / (2 * self.beta)
+```
+
+##### 2. Market Klasse (market.py)
+
+```python
+import numpy as np
+
+class Market:
+    def __init__(self, company1, company2):
+        self.company1 = company1
+        self.company2 = company2
+
+    def calculate_nash_equilibrium(self):
+        A = np.array([
+            [1, -self.company1.gamma / (2 * self.company1.beta)],
+            [-self.company2.gamma / (2 * self.company2.beta), 1]
+        ])
+        b = np.array([
+            (self.company1.alpha + self.company1.beta * self.company1.marginal_cost) / (2 * self.company1.beta),
+            (self.company2.alpha + self.company2.beta * self.company2.marginal_cost) / (2 * self.company2.beta)
+        ])
+        equilibrium_prices = np.linalg.solve(A, b)
+        return equilibrium_prices
+```
+
+##### 3. Simulation Klasse (simulation.py)
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+class Simulation:
+    def __init__(self, market, company1, company2):
+        self.market = market
+        self.company1 = company1
+        self.company2 = company2
+
+    def run(self):
+        equilibrium_prices = self.market.calculate_nash_equilibrium()
+        print(f"Nash Gleichgewichts-Preise:\n{self.company1.name}: {equilibrium_prices[0]}\n{self.company2.name}: {equilibrium_prices[1]}")
+        self.plot_reaction_functions(equilibrium_prices)
+
+    def plot_reaction_functions(self, equilibrium_prices):
+        prices = np.linspace(0, 100, 400)
+        reaction1 = [self.company1.reaction_price(p2) for p2 in prices]
+        reaction2 = [self.company2.reaction_price(p1) for p1 in prices]
+
+        plt.figure(figsize=(10, 6))
+        plt.plot(prices, reaction1, label=f'{self.company1.name} Reaktionsfunktion')
+        plt.plot(prices, reaction2, label=f'{self.company2.name} Reaktionsfunktion')
+        plt.plot(equilibrium_prices[0], equilibrium_prices[1], 'ro', label='Nash Gleichgewicht')
+        plt.xlabel('Preis')
+        plt.ylabel('Optimale Reaktion')
+        plt.title('Reaktionsfunktionen und Nash Gleichgewicht')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+```
+
+### Evolutionsstufe 1: Erweiterte Wettbewerbsmarktsimulation
+
+#### Übersicht
+
+In der ersten Evolutionsstufe wird das grundlegende Markt-Simulationsmodell erweitert, um dynamische Preisadjustierungen, realistischere Marktanteilsberechnungen und eine Vergleichsanalyse zwischen dem klassischen und dem erweiterten Bertrand-Modell zu integrieren. Diese Erweiterungen ermöglichen eine differenziertere Analyse der strategischen Interaktionen und des Marktverhaltens.
+
+#### Wissenschaftlicher Hintergrund
+
+##### Erweiterung des Bertrand-Wettbewerbsmodells
+
+Während das klassische Bertrand-Modell statische Preisstrategien und einfache Marktanteilsberechnungen verwendet, integriert die erste Evolutionsstufe dynamische Elemente, um realistischere Marktbedingungen abzubilden. Dies beinhaltet:
+
+- **Dynamische Preisadjustierungen:** Unternehmen passen ihre Preise in jedem Simulationszyklus basierend auf den Marktbedingungen und den Preisen des Wettbewerbers an.
+- **Realistischere Marktanteilsberechnungen:** Anstelle einer binären Marktzuweisung wird eine kontinuierliche Marktanteilszuweisung mittels logistischer Funktionen implementiert.
+- **Vergleichsanalyse:** Analyse der Unterschiede und Vorteile des erweiterten Modells gegenüber dem klassischen Modell.
+
+#### Projektstruktur
+
+##### Klassenübersicht
+
+1. **Market Klasse (market.py)**
+   - Repräsentiert das Marktumfeld mit zentralen ökonomischen Mechanismen.
+   - **Attribute:**
+     - `company1`: Instanz der ersten Firma
+     - `company2`: Instanz der zweiten Firma
+   - **Wichtige Methoden:**
+     - `calculate_nash_equilibrium()`: Berechnet die Nash-Gleichgewichte der Preise.
+     - `calculate_market_shares(price_a, price_b, sensitivity)`: Berechnet die Marktanteile anhand logistischer Funktionen.
+
+2. **Company Klasse (company.py)**
+   - Repräsentiert eine Firma mit spezifischen Markt- und Kostenparametern.
+   - **Attribute:**
+     - `alpha`: Basissachfrageparameter
+     - `beta`: Preisempfindlichkeit der eigenen Nachfrage
+     - `gamma`: Kreuzpreisempfindlichkeit
+     - `marginal_cost`: Grenzkosten
+     - `name`: Kennung für die Firma
+     - `price`: Aktueller Preis
+   - **Wichtige Methoden:**
+     - `set_price(price)`: Setzt den aktuellen Preis der Firma.
+     - `reaction_price(competitor_price)`: Berechnet den optimalen Preis als Reaktion auf den Preis des Wettbewerbers.
+
+3. **Simulation Klasse (simulation.py)**
+   - Orchestriert die Marktinteraktion und visualisiert die Ergebnisse.
+   - **Attribute:**
+     - `market`: Instanz der Marktklasse
+     - `company1`: Instanz der ersten Firma
+     - `company2`: Instanz der zweiten Firma
+   - **Wichtige Methoden:**
+     - `run()`: Führt die Simulation durch, berechnet die Gleichgewichte und visualisiert die Reaktionsfunktionen.
+     - `plot_reaction_functions(equilibrium_prices)`: Erstellt die Visualisierung der Reaktionsfunktionen und markiert das Nash-Gleichgewicht.
+
+##### Vergleichsanalyse
+
+Die Vergleichsanalyse zwischen dem klassischen und dem erweiterten Bertrand-Modell erfolgt in dieser Evolutionsstufe und umfasst folgende Aspekte:
+
+| **Aspekt**               | **Klassisches Modell**               | **Erweitertes Modell**                                  |
+|--------------------------|--------------------------------------|---------------------------------------------------------|
+| Marktzuweisung           | Binär (Gewinner nimmt alles)         | Kontinuierlich mit logistischer Funktion                |
+| Preisadjustierung        | Statisch                             | Dynamisch (Anpassungen pro Zyklus)                      |
+| Nash-Gleichgewicht       | Einmalige Berechnung                 | Iterative Annäherung über Zeit                          |
+| Marktdynamik             | Statisch                             | Dynamische zeitliche Entwicklung                       |
+| Realismus                | Gering                               | Höher durch realistische Annahmen                      |
+| Simulationsdynamik       |                                      |                                                         |
+
+#### Simulationsdynamik
+
+- **Dynamische Preisadjustierung:**  
+  In jedem Simulationszyklus passen die Unternehmen ihre Preise basierend auf den aktuellen Marktbedingungen und den Preisen des Wettbewerbers an. Dies ermöglicht eine realistischere Darstellung der Marktbewegungen und strategischen Entscheidungen.
+
+- **Kontinuierliche Marktanteilszuweisung:**  
+  Anstelle einer binären Zuweisung wird eine logistische Funktion verwendet, um die Marktanteile kontinuierlich und realitätsnah zu verteilen. Dies vermeidet den "Gewinner nimmt alles"-Ansatz und reflektiert die tatsächliche Marktaufteilung besser.
+
+- **Vergleich der Modelle:**  
+  Durch die Integration dynamischer Elemente und kontinuierlicher Marktanteilszuweisungen können Unterschiede im Verhalten und den Ergebnissen zwischen dem klassischen und dem erweiterten Modell analysiert werden. Dies bietet wertvolle Einblicke in die strategische Interdependenz und die Marktdynamik.
+
+#### Visualisierung
+
+Die Simulation erstellt eine grafische Darstellung der Reaktionsfunktionen beider Firmen und markiert das Nash-Gleichgewicht, was ein klares Verständnis der strategischen Interaktionen ermöglicht.
+
+#### Implementierung der erweiterten Klassen
+
+##### 1. Market Klasse (market.py)
+
+```python
+import numpy as np
+
+class Market:
+    def __init__(self, company1, company2):
+        self.company1 = company1
+        self.company2 = company2
+
+    def calculate_nash_equilibrium(self):
+        A = np.array([
+            [1, -self.company1.gamma / (2 * self.company1.beta)],
+            [-self.company2.gamma / (2 * self.company2.beta), 1]
+        ])
+        b = np.array([
+            (self.company1.alpha + self.company1.beta * self.company1.marginal_cost) / (2 * self.company1.beta),
+            (self.company2.alpha + self.company2.beta * self.company2.marginal_cost) / (2 * self.company2.beta)
+        ])
+        equilibrium_prices = np.linalg.solve(A, b)
+        return equilibrium_prices
+
+    def calculate_market_shares(self, price_a, price_b, sensitivity):
+        price_diff = (price_b - price_a) / ((price_a + price_b)/2 + 1e-9)
+        share_a = 1 / (1 + np.exp(-sensitivity * price_diff))
+        share_b = 1 - share_a
+        return share_a, share_b
+```
+
+##### 2. Company Klasse (company.py)
+
+```python
+class Company:
+    def __init__(self, alpha, beta, gamma, marginal_cost, name):
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+        self.marginal_cost = marginal_cost
+        self.name = name
+        self.price = None
+
+    def set_price(self, price):
+        self.price = price
+
+    def reaction_price(self, competitor_price):
+        return (self.alpha + self.beta * self.marginal_cost + self.gamma * competitor_price) / (2 * self.beta)
+```
+
+##### 3. Simulation Klasse (simulation.py)
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+class Simulation:
+    def __init__(self, market, company1, company2):
+        self.market = market
+        self.company1 = company1
+        self.company2 = company2
+
+    def run(self):
+        equilibrium_prices = self.market.calculate_nash_equilibrium()
+        self.company1.set_price(equilibrium_prices[0])
+        self.company2.set_price(equilibrium_prices[1])
+        print(f"Nash Gleichgewichts-Preise:\n{self.company1.name}: {equilibrium_prices[0]:.2f}\n{self.company2.name}: {equilibrium_prices[1]:.2f}")
+        self.plot_reaction_functions(equilibrium_prices)
+
+    def plot_reaction_functions(self, equilibrium_prices):
+        prices = np.linspace(0, 100, 400)
+        reaction1 = [self.company1.reaction_price(p2) for p2 in prices]
+        reaction2 = [self.company2.reaction_price(p1) for p1 in prices]
+
+        plt.figure(figsize=(10, 6))
+        plt.plot(prices, reaction1, label=f'{self.company1.name} Reaktionsfunktion')
+        plt.plot(prices, reaction2, label=f'{self.company2.name} Reaktionsfunktion')
+        plt.plot(equilibrium_prices[0], equilibrium_prices[1], 'ro', label='Nash Gleichgewicht')
+        plt.xlabel('Preis')
+        plt.ylabel('Optimale Reaktion')
+        plt.title('Reaktionsfunktionen und Nash Gleichgewicht')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+```
+
+### Evolutionsstufe 2: Dynamisches Preis- und Produktionsoptimierungsmodell
+
+#### Übersicht
+
+Diese Evolutionsstufe präsentiert einen innovativen Ansatz zur dynamischen Preisgestaltung und Produktionsoptimierung, der fortschrittliche rechnergestützte Strategien nutzt, um die wirtschaftliche Effizienz über Frühbuchungs- und Last-Minute-Marktsegmente hinweg zu maximieren.
+
+#### Theoretischer Hintergrund
+
+##### Wissenschaftliche Innovation: Dynamische Produktionsslot-Planung
+
+Der Kern wissenschaftlicher Beitrag dieser Forschung liegt in der dynamischen Zuordnung der Produktionskapazität zu Preisstrategien. Traditionelle Produktionsmodelle behandeln die Kapazität oft als statische Einschränkung, während diese Simulation einen neuartigen Mechanismus einführt:
+
+- **Adaptive Preis-Kapazitäts-Kopplung:**  
+  Produktionsslots werden basierend auf prognostizierter Marktnachfrage dynamisch zugewiesen.  
+  Preise dienen als strategisches Hebel für die Kapazitätsauslastung.  
+  Echtzeit-Nachfrageelastizität beeinflusst Produktionsentscheidungen.
+
+##### Probabilistische Nachfragemodellierung
+
+- Implementiert stochastische Marktanteilsberechnungen.
+- Verwendet marktsensitivitätsinspirierte logistische Marktanteilsfunktionen.
+- Integriert Preisempfindlichkeit und Marktschwankungen.
+
+#### Systemarchitektur
+
+##### Kernkomponenten
+
+- **Market Klasse (market.py)**
+- **Cost Klasse (cost.py)**
+- **CompanyDynamic Klasse (company.py)**
+- **CompanyStatic Klasse (company.py)**
+- **StrategyDynamic Klasse (strategy.py)**
+- **StrategyStatic Klasse (strategy.py)**
+- **Simulation Klasse (simulation.py)**
+
+##### Detaillierte Klassen- und Attributreferenz
+
+###### 1. Market Klasse (market.py)
+
+**Zweck**  
+Simuliert Marktdynamiken, Nachfragesgenerierung und Marktanteilszuweisung.
+
+**Initialisierungsparameter**
+- `early_price_sensitivity` (float, Standard=3.0):  
+  Sensitivität des Frühbuchungsmarktsegments gegenüber Preisänderungen.  
+  Höherer Wert = Dramatischere Marktanteilsverschiebungen bei Preisänderungen.
+- `last_minute_base_sensitivity` (float, Standard=1.0):  
+  Sensitivität des Last-Minute-Marktsegments gegenüber Preisänderungen.  
+  Bestimmt, wie schnell sich Marktanteile bei Preisunterschieden ändern.
+- `early_ratio` (float, Standard=0.8):  
+  Anteil der Gesamtmarktgröße, der dem Frühbuchungssegment zugewiesen wird.  
+  Gibt die Präferenz des Marktes für Vorauskäufe an.
+- `last_minute_ratio` (float, Standard=0.2):  
+  Anteil der Gesamtmarktgröße für das Last-Minute-Segment.  
+  Repräsentiert spontane oder späte Kaufentscheidungen.
+- `market_size_mean` (int, Standard=1000):  
+  Durchschnittliche Gesamtmarktgröße.  
+  Grundlage für die Nachfragesgenerierung.
+- `market_size_std` (int, Standard=200):  
+  Standardabweichung der Marktgröße.  
+  Führt Variabilität in der gesamten Marktnachfrage ein.
+
+**Wichtige Methoden**
+- `market_share(price_A, price_B, sensitivity)`:  
+  Berechnet den Marktanteil mittels logistischer Transformation.  
+  Berücksichtigt Preisunterschied und Sensitivität.  
+  Gibt Marktanteile für zwei Wettbewerber zurück.
+- `generate_demands(price_A_early, price_B_early, price_A_last, price_B_last)`:  
+  Generiert probabilistische Nachfrage für Frühbuchungs- und Last-Minute-Segmente.  
+  Anwenden von Preisempfindlichkeit und Marktschwankungen.  
+  Gibt Nachfragemengen für beide Unternehmen zurück.
+
+###### 2. Cost Klasse (cost.py)
+
+**Zweck**  
+Verwaltet Kostenstrukturen mit dynamischen Update-Mechanismen.
+
+**Initialisierungsparameter**
+- `fixed_cost` (float):  
+  Fixkosten, unabhängig vom Produktionsvolumen.  
+  Repräsentiert Gemeinkosten.
+- `marginal_cost` (float):  
+  Variable Kosten pro Produktionseinheit.  
+  Direkt beeinflusst durch Produktionsvolumen.
+- `raw_material_price` (float, Standard=10):  
+  Kosten der Rohmaterialien pro Einheit.  
+  Reflektiert Schwankungen in der Lieferkette und Inputkosten.
+- `inventory_holding_cost` (float, Standard=2):  
+  Kosten für die Lagerhaltung.  
+  Repräsentiert Lager-, Wartungs- und Opportunitätskosten.
+
+**Wichtige Methoden**
+- `total_unit_cost()`:  
+  Berechnet die Gesamtkosten pro Einheit.  
+  Kombination aus Grenzkosten und Rohmaterialpreis.
+- `update_fixed_costs(inflation_rate=0.01)`:  
+  Simuliert eine schrittweise Erhöhung der Fixkosten.  
+  Modelliert wirtschaftliche Inflationseffekte.
+- `update_marginal_costs(fluctuation_std=0.05)`:  
+  Führt stochastische Variationen der Grenzkosten ein.  
+  Verwendung der Normalverteilung für realistische Kostenänderungen.
+- `update_raw_material_price(fluctuation_std=0.05)`:  
+  Anwenden von zufälligen Schwankungen auf Rohmaterialpreise.  
+  Simuliert Lieferketten- und Marktvolatilität.
+
+###### 3. CompanyDynamic Klasse (company.py)
+
+**Zweck**  
+Repräsentiert ein anspruchsvolles Unternehmen mit dynamischen Entscheidungsfähigkeiten.
+
+**Initialisierungsparameter**
+- `name` (str): Unternehmensidentifikator.
+- `capacity` (float): Maximale Produktionskapazität.
+- `cost` (Cost): Kostenstruktur-Instanz.
+- `base_price` (float): Anfangsstrategie der Preisgestaltung.
+- `inventory` (float, Standard=0): Anfangsbestand.
+- `buffer_stock` (int, Standard=20): Mindestbestandsschwelle.
+
+**Wichtige Methoden**
+- `set_buffer_stock(new_buffer)`:  
+  Anpassung der Mindestbestandsgröße.  
+  Ermöglicht eine adaptive Lagerhaltungsstrategie.
+- `use_strategy(strategy, price_B_early, price_B_last, market)`:  
+  Anwendung der Optimierungsstrategie.  
+  Berücksichtigung von Wettbewerberpreisen und Marktbedingungen.  
+  Aktualisierung von Lagerbestand und Basispreis basierend auf Strategieergebnis.
+
+###### 4. CompanyStatic Klasse (company.py)
+
+**Zweck**  
+Repräsentiert ein einfacheres, reaktives Preisgestaltungsunternehmen.
+
+**Initialisierungsparameter**
+- `name` (str): Unternehmensidentifikator.
+- `capacity` (float): Maximale Produktionskapazität.
+- `cost` (Cost): Kostenstruktur-Instanz.
+- `base_price` (float): Anfangsstrategie der Preisgestaltung.
+
+**Wichtige Methoden**
+- `simple_decision(dB_early, dB_lm)`:  
+  Trifft Produktions- und Verkaufsentscheidungen.  
+  Berücksichtigt Nachfrage und Produktionskapazität.  
+  Berechnet Gewinn basierend auf Verkäufen und Kosten.
+- `adjust_price(strategy, competitor_price)`:  
+  Anwendung der adaptiven Preisstrategie.  
+  Reaktion auf die Preisgestaltung des Wettbewerbers.  
+  Sicherstellung, dass der Preis über den Grenzkosten bleibt.
+
+###### 5. StrategyDynamic Klasse (strategy.py)
+
+**Zweck**  
+Implementiert eine komplexe Optimierungsstrategie für fortschrittliche Preisentscheidungen.
+
+**Initialisierungsparameter**
+- `early_price_candidates` (Liste, Standard=[60, 80, 100, 120, 140]):  
+  Potenzielle Preisoptionen für Frühbuchungen.  
+  Ermöglicht strategische Preiserkundung.
+- `last_price_candidates` (Liste, Standard=[80, 120, 160, 200]):  
+  Potenzielle Preisoptionen für Last-Minute-Angebote.  
+  Ermöglicht flexible Preisadaptionen.
+
+**Wichtige Methode**
+- `optimize_decision(company, price_B_early, price_B_last, market)`:  
+  Generiert mehrere Preisszenarien.  
+  Verwendung der linearen Programmierung zur optimalen Entscheidungsfindung.  
+  Berücksichtigung von:
+  - Produktionskapazitätsbeschränkungen.
+  - Lagerbestandsbeschränkungen.
+  - Umsatzmaximierung.
+  - Nachfragevariabilität.
+
+###### 6. StrategyStatic Klasse (strategy.py)
+
+**Zweck**  
+Bietet einen einfachen, adaptiven Preisgestaltungsmechanismus.
+
+**Initialisierungsparameter**
+- `max_adjustment` (float, Standard=0.05):  
+  Maximale erlaubte prozentuale Preisänderung.  
+  Verhindert extreme Preisschwankungen.
+
+**Wichtige Methode**
+- `adjust_price(own_price, competitor_price, marginal_cost)`:  
+  Implementiert die Preisänderungslogik.  
+  Vergleich des eigenen Preises mit dem des Wettbewerbers.  
+  Sicherstellung, dass der Preis über den Grenzkosten bleibt.  
+  Einführung leichter Zufälligkeit für Marktrealismus.
+
+###### 7. Simulation Klasse (simulation.py)
+
+**Zweck**  
+Orchestriert die Interaktion zwischen allen Komponenten über mehrere Zeiteinheiten hinweg.
+
+**Funktionalität**
+- Initialisiert Markt- und Unternehmensparameter.
+- Führt mehrperiodige Simulationen durch.
+- Generiert Nachfrageszenarien.
+- Wendet unternehmensspezifische Strategien an.
+- Berechnet finanzielle Ergebnisse.
+- Aktualisiert Kostenstrukturen.
+- Visualisiert und analysiert die Ergebnisse.
+
+#### Mathematische Grundlagen
+
+##### Marktanteilsberechnung
+
+Der Marktanteil wird durch eine logistische Funktion des Preisunterschieds bestimmt:
+
+$$
+share_A = \frac{1}{1 + e^{-sensitivity \times price\_diff}}
+$$
+
+**Eigenschaften der logistischen Transformation:**
+- Gleichmäßiger Marktanteilsübergang.
+- Symmetrische Reaktion um die Preisparität.
+- Kontinuierliche Wahrscheinlichkeitsverteilung.
+
+##### Nachfragemodell
+
+Die Nachfrage wird durch einen mehrstufigen stochastischen Prozess generiert:
+
+- Basismarktgröße (Normalverteilung).
+- Preisabhängige Skalierungsfaktoren.
+- Segment-spezifische Nachfragezuweisung.
+
+**Formel:**
+
+$$
+Q_i = market\_size \times \left(1 - \frac{max\_price}{p_i}\right)
+$$
+
+#### Schlüsselinnovationen
+
+- **Dynamische Kapazitätszuweisung:**  
+  Produktionskapazität ist nicht fest, sondern wird dynamisch angepasst.  
+  Preise dienen als Steuermechanismus für die Kapazitätsauslastung.
+
+- **Stochastische Optimierung:**  
+  Verwendung der linearen Programmierung für die Szenarienauswahl.  
+  Berücksichtigung von Unsicherheiten in den Marktbedingungen.
+
+- **Mehrsegment-Marktmodellierung:**  
+  Unterscheidung zwischen Frühbuchungs- und Last-Minute-Segmenten.  
+  Unterschiedliche Preisempfindlichkeiten für jedes Segment.
+
+#### Leistungskennzahlen
+
+- Gewinn pro Periode
+- Marktanteil
+- Produktionseffizienz
+- Lagerbestandsmanagement
+- Kostenstruktur-Entwicklung
+
+#### Nutzung
+
+##### Voraussetzungen
+
+- Python 3.8+
+- NumPy
+- Pandas
+- Matplotlib
+- PuLP (Lineare Programmierung)
+
+##### Simulation Ausführen
+
+```bash
+python simulation.py
+```
+
+##### Visualisierung
+
+Die Simulation generiert zwei umfassende Visualisierungen:
+
+- Gesamte Marktdynamik
+- Kosten- und Produktionsinsights
+
+**Ausgaben umfassen:**
+- Gewinntrends
+- Preisentwicklung
+- Marktanteilentwicklung
+- Produktions- und Lagerbestandskennzahlen
+
+##### Konfigurationsoptionen
+
+- Anpassbare Marktsensitivität.
+- Konfigurierbare Kostenstrukturen.
+- Anpassbare Preisstrategien.
+- Variable Marktgrößenparameter.
+
+#### Zukünftige Forschungsrichtungen
+
+- Maschinelles Lernen zur Nachfrageprognose
+- Erweiterung auf Mehrfirmen-Szenarien
+- Entwicklung von Echtzeit-Adaptivpreismechanismen
+
+#### Einschränkungen
+
+- Annahme rationalen Marktverhaltens.
+- Vereinfachte Kosten- und Nachfragemodelle.
+- Deterministischer Optimierungsansatz.
+
+## Wechselwirkungen
+
+### Interaktion zwischen Komponenten
+
+Die verschiedenen Klassen und Module interagieren wie folgt:
+
+- **Market:** Zentralisiert die Marktdynamik und generiert die Nachfragemengen basierend auf den Preisen der Unternehmen. Kommuniziert mit den Company Klassen, um Marktanteile und Nachfrage zu verteilen.
+- **Cost:** Jede Company Instanz besitzt eine Cost Instanz, die die Kostenstruktur des Unternehmens verwaltet. Änderungen in den Kosten beeinflussen direkt die Preisentscheidungen der Unternehmen.
+- **CompanyDynamic und CompanyStatic:** Repräsentieren unterschiedliche Unternehmensstrategien. Sie interagieren mit der Market Klasse, um Preise anzupassen und Gewinne zu maximieren.
+- **StrategyDynamic und StrategyStatic:** Definieren die Preisentscheidungslogiken für die jeweiligen Company Klassen. Sie nutzen Daten von Market und Cost, um optimale Preisentscheidungen zu treffen.
+- **Simulation:** Koordiniert die Interaktion aller Komponenten über mehrere Zeiteinheiten hinweg. Sammeln Daten von Market und Company Klassen, führen Anpassungen durch und visualisieren die Ergebnisse.
+
+### Datenfluss
+
+1. **Initialisierung:**  
+   Market und Company Klassen werden mit Anfangsparametern instanziiert.
+
+2. **Simulation Loop:** In jeder Periode:
+   - Market generiert die Nachfrage basierend auf aktuellen Preisen.
+   - Company Klassen entscheiden über Preisänderungen unter Verwendung ihrer Strategy Klassen.
+   - Cost Klassen aktualisieren die Kostenstrukturen.
+   - Market verteilt die Nachfrage entsprechend den neuen Preisen.
+   - Simulation sammelt und speichert die Ergebnisse.
+
+3. **Visualisierung:**  
+   Nach Abschluss der Simulation werden die gesammelten Daten visualisiert.
+
+### Abhängigkeiten
+
+- Company Klassen sind abhängig von Market und Cost Klassen für Entscheidungsgrundlagen.
+- Strategy Klassen sind abhängig von Company und Market Klassen, um fundierte Preisentscheidungen zu treffen.
+- Simulation Klasse ist die orchestrierende Einheit, die alle anderen Komponenten integriert und koordiniert.
+
+### UML-Diagramm Hinweis
+
+Für die Erstellung eines UML-Diagramms können die Klassen, ihre Attribute und Methoden sowie die Beziehungen (Assoziationen, Aggregationen, Abhängigkeiten) entsprechend den detaillierten Beschreibungen modelliert werden. Achten Sie besonders auf die Assoziationen zwischen Market und Company Klassen sowie die Abhängigkeiten der Strategy Klassen von den Company Klassen.
 
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/market-simulation
+git clone https://github.com/IhrBenutzername/market-simulation
+cd market-simulation
 pip install -r requirements.txt
 python simulation.py
 ```
 
-## Contributing
+## Nutzung
 
-1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Create pull request
+### Beispielcode
 
-## License
+```python
+# Marktkomponenten initialisieren
+from company import Company
+from market import Market
+from simulation import Simulation
 
-[Specify your license - e.g., MIT, Apache]
+company_a = Company(alpha=100, beta=10, gamma=5, marginal_cost=20, name='Firma A')
+company_b = Company(alpha=100, beta=10, gamma=5, marginal_cost=20, name='Firma B')
+market = Market(company1=company_a, company2=company_b)
 
----
+# Simulation durchführen
+simulation = Simulation(market=market, company1=company_a, company2=company_b)
+simulation.run()
+```
 
-**Note:** This simulation represents a theoretical model and should be interpreted as a research tool, not a definitive market prediction mechanism.
+## Lizenz
 
-## Limitations and Future Work
-- Extends basic Bertrand model with stochastic elements
-- Can be enhanced with:
-  - More complex cost structures
-  - Additional market entry/exit mechanisms
-  - Advanced consumer behavior models
-  - Complex Inventory Management
+MIT Lizenz
 
-## Author
-[Your Name]
+## Beitragende
+
+Beiträge sind willkommen! Bitte lesen Sie [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Kontakt
+
+**Leon de Vries**  
+Email: mail@leondevries.de  
+Projekt: [GitHub Repository](https://github.com/IhrBenutzername/market-simulation)
+
+## Abschluss
+
+Diese Dokumentation bietet einen umfassenden Überblick über die Entwicklung und Implementierung eines erweiterten Bertrand-Wettbewerbsmodells. Durch die strukturierte Herangehensweise gemäß VDI 3633 und die detaillierte Beschreibung der Evolutionsstufen wird eine solide Grundlage für die weitere Forschung und Entwicklung in diesem Bereich geschaffen.  
+Für weitere Informationen, Fragen oder Beiträge stehen wir Ihnen gerne zur Verfügung.
+
+## Autor
+
+**Leon de Vries**
+
+```
