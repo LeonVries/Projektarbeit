@@ -10,7 +10,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
 ## 📝 Inhaltsverzeichnis
 
 - [Einleitung](#einleitung)
-  - [Projektstruktur nach VDI 3633](#projektstruktur-nach-vdi-3633)
 - [Ausgangssituation und Ziel](#ausgangssituation-und-ziel)
   - [Ausgangssituation](#ausgangssituation)
   - [Ziel](#ziel)
@@ -32,9 +31,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
     - [Mathematische Grundlagen](#mathematische-grundlagen)
       - [Lineare Nachfragefunktion](#lineare-nachfragefunktion)
     - [Simulationsparameter](#simulationsparameter)
-    - [Potenzielle Erweiterungen und Forschungsrichtungen](#potenzielle-erweiterungen-und-forschungsrichtungen)
-    - [Anforderungen](#anforderungen)
-    - [Nutzung](#nutzung)
       - [Beispielcode](#beispielcode)
     - [Implementierung der Klassen](#implementierung-der-klassens)
       - [1. Company Klasse (company.py)](#1-company-klasse-companypy)
@@ -42,18 +38,13 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
       - [3. Simulation Klasse (simulation.py)](#3-simulation-klasse-simulationpy)
   - [Evolutionsstufe 1: Erweiterte Wettbewerbsmarktsimulation](#evolutionsstufe-1-erweiterte-wettbewerbsmarktsimulation)
     - [Übersicht](#übersicht)
-    - [Wissenschaftlicher Hintergrund](#wissenschaftlicher-hintergrund)
       - [Erweiterung des Bertrand-Wettbewerbsmodells](#erweiterung-des-bertrand-wettbewerbsmodells)
     - [Projektstruktur](#projektstruktur-1)
       - [Klassenübersicht](#klassenübersicht)
-      - [Vergleichsanalyse](#vergleichsanalyse)
       - [Simulationsdynamik](#simulationsdynamik)
-    - [Visualisierung](#visualisierung-1)
     - [Implementierung der erweiterten Klassen](#implementierung-der-erweiterten-klassens)
   - [Evolutionsstufe 2: Dynamisches Preis- und Produktionsoptimierungsmodell](#evolutionsstufe-2-dynamisches-preis--und-produktionsoptimierungsmodell)
     - [Übersicht](#übersicht-1)
-    - [Theoretischer Hintergrund](#theoretischer-hintergrund-1)
-      - [Wissenschaftliche Innovation: Dynamische Produktionsslot-Planung](#wissenschaftliche-innovation-dynamische-produktionsslot-planung)
       - [Probabilistische Nachfragemodellierung](#probabilistische-nachfragemodellierung)
     - [Systemarchitektur](#systemarchitektur)
       - [Kernkomponenten](#kernkomponenten)
@@ -68,7 +59,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
     - [Mathematische Grundlagen](#mathematische-grundlagen-1)
       - [Marktanteilsberechnung](#marktanteilsberechnung)
       - [Nachfragemodell](#nachfragemodell)
-    - [Schlüsselinnovationen](#schlüsselinnovationen)
     - [Leistungskennzahlen](#leistungskennzahlen)
     - [Nutzung](#nutzung-1)
       - [Voraussetzungen](#voraussetzungen)
@@ -81,10 +71,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
   - [Interaktion zwischen Komponenten](#interaktion-zwischen-komponenten)
   - [Datenfluss](#datenfluss)
   - [Abhängigkeiten](#abhängigkeiten)
-  - [UML-Diagramm Hinweis](#uml-diagramm-hinweis)
-- [Installation](#installation)
-- [Nutzung](#nutzung-2)
-  - [Beispielcode](#beispielcode-1)
 - [Lizenz](#lizenz)
 - [Beitragende](#beitragende)
 - [Kontakt](#kontakt)
@@ -94,27 +80,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
 ## 🎯 Überblick
 
 Dieses Projekt zielt darauf ab, umfassende und erweiterte Modelle des Bertrand-Wettbewerbs zu entwickeln und zu simulieren. Der Fokus liegt auf der Maximierung des Gewinns durch dynamische Preisstrategien, die die Produktionsauslastung optimieren. Der Projektaufbau orientiert sich an der VDI-Richtlinie 3633, welche eine strukturierte Vorgehensweise für technische Projekte bietet. Durch die Durcharbeitung von drei Evolutionsstufen wird eine zunehmende Komplexität und Realitätsnähe der Modelle erreicht, um realistische Marktbedingungen und strategische Interaktionen zwischen Unternehmen zu simulieren.
-
-### 📦 Projektstruktur nach VDI 3633
-
-Die VDI 3633 unterteilt Projekte in mehrere Phasen, die hier adaptiert wurden:
-
-1. **Projektdefinition**
-   - Zielsetzung
-   - Anforderungen
-   - Rahmenbedingungen
-2. **Konzeptentwicklung**
-   - Erstellung der Roadmap
-   - Modellierung der Evolutionsstufen
-3. **Umsetzung**
-   - Implementierung der Modelle
-   - Integration der Komponenten
-   - Test und Validierung
-     - Simulationen durchführen
-     - Ergebnisse analysieren
-4. **Dokumentation und Abschluss**
-   - Erstellung der Dokumentation
-   - Abschlussbericht
 
 ## 🎯 Ausgangssituation und Ziel
 
