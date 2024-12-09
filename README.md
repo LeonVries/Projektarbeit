@@ -1,4 +1,3 @@
-```markdown
 # Markt-Simulationsprojekt: Erweiterte Bertrand-Wettbewerbsmodelle
 
 ## Inhaltsverzeichnis
@@ -170,7 +169,7 @@ Ein Nash-Gleichgewicht stellt einen Zustand dar, in dem keine Firma einseitig ih
                         +---------------+
                         | + reaction_price() |
                         +---------------+
-```
+
 
 ##### Company Klasse (company.py)
 
