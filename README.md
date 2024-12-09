@@ -1,4 +1,3 @@
-```markdown
 # Markt-Simulationsprojekt: Erweiterte Bertrand-Wettbewerbsmodelle
 
 ## Inhaltsverzeichnis
