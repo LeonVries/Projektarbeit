@@ -157,7 +157,7 @@ Ein Nash-Gleichgewicht stellt einen Zustand dar, in dem keine Firma einseitig ih
 
 ##### Klassendiagramm
 
-plaintext
+```plaintext
 +---------------+       +---------------+       +---------------+
 |    Market     |       |   Company     |       |   Simulation  |
 +---------------+       +---------------+       +---------------+
