@@ -1,3 +1,152 @@
+# Evolutionsstufe 0
+
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Historical and Theoretical Origins
+
+### Joseph Bertrand and the Birth of Competitive Pricing Theory
+
+The Bertrand model, developed by French mathematician Joseph Bertrand in 1883, represents a fundamental breakthrough in understanding oligopolistic market dynamics. Published in his review of Antoine Cournot's work "Recherches sur les Principes Mathématiques de la Théorie des Richesses", Bertrand challenged Cournot's assumptions about firm behavior.
+
+#### Key Theoretical Contributions
+
+1. **Strategic Price Competition**
+   - Firms compete by setting prices simultaneously
+   - Consumers purchase from the lowest-price producer
+   - Introduces the concept of strategic interdependence
+
+2. **Critical Insights**
+   - Demonstrated that price competition can drive prices to marginal cost
+   - Showed how firms' strategic decisions fundamentally differ from quantity-based competition
+   - Laid groundwork for modern industrial organization theory
+
+### Evolution of the Bertrand Model
+
+#### Classical Bertrand Model Characteristics
+- **Perfect Competition Assumption**
+  - Identical products
+  - No capacity constraints
+  - Full market information
+  - Instantaneous price adjustments
+
+#### Limitations of Classical Model
+- Unrealistic immediate price convergence
+- Binary market allocation
+- Neglects real-world market complexities
+
+## 🎯 Project Overview
+
+This project implements an advanced Bertrand competition model with:
+- Gradual price adjustment mechanisms
+- Realistic market share distribution
+- Dynamic temporal evolution
+- Comprehensive result visualization
+
+## 🔧 Advanced Model Features
+
+### Innovative Model Characteristics
+- **Continuous Market Share Allocation**
+  - Uses logistic function for smooth market division
+  - Avoids binary "winner-takes-all" approach
+
+- **Constrained Price Dynamics**
+  - Maximum 8% price adjustment per time unit
+  - Prevents unrealistic instant price changes
+
+- **Sophisticated Demand Modeling**
+  - Non-linear demand function
+  - Price sensitivity parametrization
+  - Market size considerations
+
+## 📐 Mathematical Foundations
+
+### Demand Function
+
+The core demand function represents market behavior:
+
+\[
+Q(p) = \text{market\_size} \cdot \left(1 - \frac{p}{\text{max\_price}}\right)
+\]
+
+#### Parameter Interpretation
+- `market_size`: Maximum demand at zero price
+- `max_price`: Price point eliminating all demand
+- Captures non-linear market responsiveness
+
+### Price Adjustment Mechanism
+
+\[
+p_1(t+1) = \begin{cases} 
+\max(c, p_2(t) \cdot (1 - \delta(t))), & \text{wenn } p_1(t) > p_2(t) \\
+p_1(t), & \text{sonst}
+\end{cases}
+\]
+
+With \( \delta(t) \) representing a controlled randomness in price underbidding.
+
+## 📊 Comparative Analysis
+
+### Classical vs. Dynamic Bertrand Model
+
+| Aspect | Classical Model | Dynamic Model |
+|--------|----------------|---------------|
+| **Market Allocation** | Binary (Winner-takes-all) | Continuous |
+| **Price Adjustment** | Instantaneous | Gradual (max 8% per period) |
+| **Nash Equilibrium** | At marginal cost | Approximative, evolving |
+| **Time Dimension** | Static | Explicit temporal dynamics |
+
+## 🧠 Scientific Contributions
+
+1. Enhanced market competition simulation
+2. More realistic pricing strategies
+3. Improved understanding of oligopolistic interactions
+4. Computational approach to economic modeling
+
+## 💻 Usage Example
+
+```python
+from bertrand_dynamics import BertrandDynamics
+
+# Model Initialization
+model = BertrandDynamics(
+    marginal_cost=10,       # Production cost
+    market_size=1000,       # Total market potential
+    max_price=50,           # Maximum feasible price
+    price_sensitivity=2.0   # Demand elasticity
+)
+
+# Simulation
+results = model.simulate(
+    initial_price_1=45,     # Starting price for Firm 1
+    initial_price_2=40,     # Starting price for Firm 2
+    num_periods=50          # Simulation duration
+)
+```
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/LeonVries/basic
+cd dynamic-bertrand-model
+pip install numpy matplotlib
+```
+
+## 📄 License
+
+MIT License - See [LICENSE](LICENSE) for details.
+
+## 👥 Contribution
+
+Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## 📬 Contact
+
+Leon de Vries
+- Email: mail@leondevries.de
+- Project: [GitHub Repository](https://github.com/LeonVries/basic)
+
+
 # Evolutionsstufe 1
 
 # Bertrand Competition Market Simulation
