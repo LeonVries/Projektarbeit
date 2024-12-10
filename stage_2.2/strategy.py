@@ -13,7 +13,7 @@ Funktionsweise:
 1. **Preis-Kombinationen generieren:**
    - **Frühbucher-Preise (`early_price_candidates`)** und **Last-Minute-Preise (`last_price_candidates`)** werden kombiniert.
    - Für jede Kombination wird die Nachfrage (`dA_early`, `dA_lm`) basierend auf den Preisen berechnet (`market.generate_demands`).
-
+   - Hier ist den UN die Nachfragekure & elastizität bekannt, entsprechend stark vereinfacht - in der Realtität sieht das natürlich anders aus: Hier bietet sich an mit Regressionen oä zu arbeiten im advanced Modell - Für die PA Aber irrelevant denke ich  
 2. 
    - **Entscheidungsvariablen:**
      - **Binäre Variablen (`x[i]`):** Wählen ein spezifisches Preis-Szenario (1 = gewählt, 0 = nicht gewählt).
