@@ -6,6 +6,8 @@ import numpy as np
 #Ebenfalls Krisen integrierbar
 
 
+# cost.py
+
 class Cost:
     def __init__(self, fixed_cost, marginal_cost, raw_material_price=10, inventory_holding_cost=2):
         self.fixed_cost = fixed_cost
@@ -24,10 +26,11 @@ class Cost:
         self.marginal_cost *= (1 + fluctuation)
         self.marginal_cost = max(1, self.marginal_cost)
 
-    def update_raw_material_price(self, fluctuation_std=0.05):
+    def update_raw_material_price(self, fluctuation_std=0.15):
         fluctuation = np.random.normal(0, fluctuation_std)
         self.raw_material_price *= (1 + fluctuation)
         self.raw_material_price = max(1, self.raw_material_price)
 
     def get_marginal_cost(self):
         return self.marginal_cost
+

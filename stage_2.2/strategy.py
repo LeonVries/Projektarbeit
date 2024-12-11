@@ -1,7 +1,4 @@
-from pulp import LpProblem, LpMaximize, LpVariable, lpSum
-import numpy as np
 
-#Hier eigentliche Optimierungsstrategie des UN:
 
 '''
 ### **1. Unternehmen A: `StrategyDynamic`**
@@ -37,6 +34,10 @@ Funktionsweise:
 
 '''
 
+from pulp import LpProblem, LpMaximize, LpVariable, lpSum
+import numpy as np
+
+# Unternehmen A: StrategyDynamic
 class StrategyDynamic:
 
     def __init__(self, early_price_candidates=[60, 80, 100, 120, 140],
@@ -51,14 +52,14 @@ class StrategyDynamic:
         for pe in self.early_price_candidates:
             for pl in self.last_price_candidates:
                 dA_early, dA_lm, dB_early, dB_lm = market.generate_demands(pe, price_B_early, pl, price_B_last)
-                
+
                 # Einführung von Schätzfehlern
                 uncertainty_factor_early = np.random.uniform(1 - self.demand_uncertainty, 1 + self.demand_uncertainty)
                 uncertainty_factor_lm = np.random.uniform(1 - self.demand_uncertainty, 1 + self.demand_uncertainty)
-                
+
                 dA_early_est = dA_early * uncertainty_factor_early
                 dA_lm_est = dA_lm * uncertainty_factor_lm
-                
+
                 scenarios.append((pe, pl, dA_early_est, dA_lm_est))
 
         model = LpProblem("A_decision", LpMaximize)
@@ -114,6 +115,7 @@ class StrategyDynamic:
             # Fallback, falls kein Szenario gewählt wird
             return company.base_price, 100, 0, company.inventory, 0, 0, 0
 
+# Unternehmen B: StrategyStatic
 class StrategyStatic:
 
     def __init__(self, max_adjustment=0.05):
