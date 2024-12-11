@@ -9,10 +9,11 @@ from strategy import StrategyDynamic, StrategyStatic
 
 def plot_results(results, companyA_capacity, companyB_capacity):
     (profits_A_per_period, profits_B_per_period, prices_A_early_list, prices_A_last_list,
-     production_A_list, inventory_A_list, dA_early_list, dA_lm_list, dB_early_list, dB_lm_list,
-     soldB_list, market_share_A_list, market_share_B_list, unit_cost_A_list, fixed_cost_A_list,
-     unit_cost_B_list, fixed_cost_B_list, prices_B_early_list, prices_B_last_list,
-     production_B_list, inventory_B_list) = results
+     production_A_list, inventory_A_list, dA_early_est_list, dA_lm_est_list,
+     dB_early_list, dB_lm_list, soldB_list, market_share_A_list, market_share_B_list,
+     unit_cost_A_list, fixed_cost_A_list, unit_cost_B_list, fixed_cost_B_list,
+     prices_B_early_list, prices_B_last_list, production_B_list, inventory_B_list,
+     dA_early_val_list, dA_lm_val_list) = results
 
     cumulative_profit_A = np.cumsum(profits_A_per_period)
     cumulative_profit_B = np.cumsum(profits_B_per_period)
@@ -20,7 +21,7 @@ def plot_results(results, companyA_capacity, companyB_capacity):
     oee_B = np.array(production_B_list) / companyB_capacity
 
     # Verkäufe von A = dA_early + dA_lm
-    soldA_list = [dA_early_list[i] + dA_lm_list[i] for i in range(len(dA_early_list))]
+    soldA_list = [dA_early_est_list[i] + dA_lm_est_list[i] for i in range(len(dA_early_est_list))]
 
     # Erster Tab
     plt.figure(figsize=(20, 18))
@@ -60,13 +61,13 @@ def plot_results(results, companyA_capacity, companyB_capacity):
     plt.ylabel('OEE')
     plt.legend()
 
-    # 5. Nachfrage A und B
+    # 5. Nachfrage A und B (geschätzt)
     plt.subplot(4, 3, 5)
-    plt.plot(dA_early_list, label='A Frühbucher Nachfrage', marker='o')
-    plt.plot(dA_lm_list, label='A Last-Minute Nachfrage', marker='x')
+    plt.plot(dA_early_est_list, label='A Frühbucher Nachfrage (geschätzt)', marker='o')
+    plt.plot(dA_lm_est_list, label='A Last-Minute Nachfrage (geschätzt)', marker='x')
     plt.plot(dB_early_list, label='B Frühbucher Nachfrage', linestyle='--', marker='o')
     plt.plot(dB_lm_list, label='B Last-Minute Nachfrage', linestyle='--', marker='x')
-    plt.title('Nachfrageentwicklung')
+    plt.title('Nachfrageentwicklung (geschätzt)')
     plt.xlabel('Periode')
     plt.ylabel('Nachfrage')
     plt.legend()
@@ -115,13 +116,55 @@ def plot_results(results, companyA_capacity, companyB_capacity):
     plt.ylabel('Werte')
     plt.legend()
 
+    # 11. Geschätzte vs. Tatsächliche Nachfrage A Frühbucher
+    plt.subplot(4, 3, 11)
+    plt.plot(dA_early_est_list, label='A Frühbucher Nachfrage (geschätzt)', marker='o')
+    plt.plot(dA_early_val_list, label='A Frühbucher Nachfrage (tatsächlich)', marker='x')
+    plt.title('Geschätzte vs. Tatsächliche Nachfrage A Frühbucher')
+    plt.xlabel('Periode')
+    plt.ylabel('Nachfrage')
+    plt.legend()
+
+    # 12. Geschätzte vs. Tatsächliche Nachfrage A Last-Minute
+    plt.subplot(4, 3, 12)
+    plt.plot(dA_lm_est_list, label='A Last-Minute Nachfrage (geschätzt)', marker='o')
+    plt.plot(dA_lm_val_list, label='A Last-Minute Nachfrage (tatsächlich)', marker='x')
+    plt.title('Geschätzte vs. Tatsächliche Nachfrage A Last-Minute')
+    plt.xlabel('Periode')
+    plt.ylabel('Nachfrage')
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+    # **Neuer Overlay-Plot: Geschätzte vs. Tatsächliche Nachfrage A**
+    plt.figure(figsize=(20, 10))
+
+    # Frühbucher Nachfrage
+    plt.subplot(1, 2, 1)
+    plt.plot(dA_early_est_list, label='Geschätzte Nachfrage (Frühbucher)', marker='o')
+    plt.plot(dA_early_val_list, label='Tatsächliche Nachfrage (Frühbucher)', marker='x')
+    plt.title('Geschätzte vs. Tatsächliche Nachfrage A Frühbucher')
+    plt.xlabel('Periode')
+    plt.ylabel('Nachfrage')
+    plt.legend()
+
+    # Last-Minute Nachfrage
+    plt.subplot(1, 2, 2)
+    plt.plot(dA_lm_est_list, label='Geschätzte Nachfrage (Last-Minute)', marker='o')
+    plt.plot(dA_lm_val_list, label='Tatsächliche Nachfrage (Last-Minute)', marker='x')
+    plt.title('Geschätzte vs. Tatsächliche Nachfrage A Last-Minute')
+    plt.xlabel('Periode')
+    plt.ylabel('Nachfrage')
+    plt.legend()
+
     plt.tight_layout()
     plt.show()
 
     # Zweiter Tab
-    plt.figure(figsize=(20, 12))
+    plt.figure(figsize=(20, 16))
     # 1. Kostenentwicklung A und B (fixe und variable)
-    plt.subplot(2, 3, 1)
+    plt.subplot(3, 2, 1)
     plt.plot(fixed_cost_A_list, label='Fixkosten/Einheit A', marker='o')
     plt.plot(unit_cost_A_list, label='Var.Kosten/Einheit A', marker='x')
     plt.plot(fixed_cost_B_list, label='Fixkosten/Einheit B', marker='o', linestyle='--')
@@ -132,7 +175,7 @@ def plot_results(results, companyA_capacity, companyB_capacity):
     plt.legend()
 
     # 2. Preisentwicklung B
-    plt.subplot(2, 3, 2)
+    plt.subplot(3, 2, 2)
     plt.plot(prices_B_early_list, label='B Frühbucher Preis', marker='o')
     plt.plot(prices_B_last_list, label='B Last-Minute Preis', marker='x')
     plt.title('Preisentwicklung B')
@@ -141,7 +184,7 @@ def plot_results(results, companyA_capacity, companyB_capacity):
     plt.legend()
 
     # 3. Produktion und Lagerbestand B
-    plt.subplot(2, 3, 3)
+    plt.subplot(3, 2, 3)
     plt.plot(production_B_list, label='Produktion B', marker='o')
     plt.plot(inventory_B_list, label='Lagerbestand B', marker='x')
     plt.title('Produktion und Lagerbestand B')
@@ -150,12 +193,32 @@ def plot_results(results, companyA_capacity, companyB_capacity):
     plt.legend()
 
     # 4. Vergleich verkaufte Menge A und B
-    plt.subplot(2, 3, 4)
+    plt.subplot(3, 2, 4)
     plt.plot(soldA_list, label='Verkäufe A', marker='o')
     plt.plot(soldB_list, label='Verkäufe B', marker='x')
     plt.title('Verkäufe A vs B')
     plt.xlabel('Periode')
     plt.ylabel('Verkäufe')
+    plt.legend()
+
+    # 5. Abweichung Produktion A vs Tatsächliche Nachfrage A
+    plt.subplot(3, 2, 5)
+    actual_demand_A = np.array(dA_early_val_list) + np.array(dA_lm_val_list)
+    production_A = np.array(production_A_list)
+    deviation_A = production_A - actual_demand_A
+    plt.plot(deviation_A, label='Produktion A - Tatsächliche Nachfrage A', marker='o')
+    plt.title('Abweichung Produktion A vs Tatsächliche Nachfrage A')
+    plt.xlabel('Periode')
+    plt.ylabel('Abweichung (Menge)')
+    plt.legend()
+
+    # 6. Lagerbestand A im Vergleich zur tatsächlichen Nachfrage
+    plt.subplot(3, 2, 6)
+    plt.plot(inventory_A_list, label='Lagerbestand A', marker='o')
+    plt.plot(actual_demand_A, label='Tatsächliche Nachfrage A', marker='x')
+    plt.title('Lagerbestand A vs Tatsächliche Nachfrage A')
+    plt.xlabel('Periode')
+    plt.ylabel('Menge')
     plt.legend()
 
     plt.tight_layout()
@@ -188,8 +251,8 @@ def run_simulation():
     prices_A_last_list = []
     production_A_list = []
     inventory_A_list = []
-    dA_early_list = []
-    dA_lm_list = []
+    dA_early_est_list = []  # Geschätzte Frühbucher-Nachfrage
+    dA_lm_est_list = []    # Geschätzte Last-Minute-Nachfrage
     dB_early_list = []
     dB_lm_list = []
     soldB_list = []
@@ -205,6 +268,10 @@ def run_simulation():
     prices_B_last_list = []
     production_B_list = []
     inventory_B_list = []
+
+    # Listen für tatsächliche Nachfrage von A
+    dA_early_val_list = []
+    dA_lm_val_list = []
 
     # Initial Preis für B
     compB.base_price = 100  # Startpreis
@@ -223,7 +290,7 @@ def run_simulation():
 
             # Unternehmen A trifft Entscheidung
             compA.use_strategy(strategyA, price_B_early=compB.base_price, price_B_last=compB.base_price, market=market)
-            pe, pl, prodA, invA, profitA_period, dA_early, dA_lm = compA.last_decision
+            pe, pl, prodA, invA, profitA_period, dA_early_est, dA_lm_est = compA.last_decision
 
             # Debugging: Werte von pe und pl
             print(f"Periode {t+1}:")
@@ -237,8 +304,8 @@ def run_simulation():
             profits_A_per_period.append(profitA_period)
             profitA += profitA_period
 
-            dA_early_list.append(dA_early)
-            dA_lm_list.append(dA_lm)
+            dA_early_est_list.append(dA_early_est)
+            dA_lm_est_list.append(dA_lm_est)
             production_A_list.append(prodA)
             inventory_A_list.append(invA)
             prices_A_early_list.append(pe)
@@ -253,18 +320,22 @@ def run_simulation():
             prices_B_early_list.append(prices_B_early)
             prices_B_last_list.append(prices_B_last)
 
-            # Nachfrage berechnen
+            # Tatsächliche Nachfrage berechnen (unabhängig von der Strategie)
             dA_early_val, dA_lm_val, dB_early_val, dB_lm_val = market.generate_demands(pe, prices_B_early, pl, prices_B_last)
 
             # Debugging: Nachfragewerte
-            print(f"  Nachfrage A Frühbucher: {dA_early_val}")
-            print(f"  Nachfrage A Last-Minute: {dA_lm_val}")
+            print(f"  Nachfrage A Frühbucher (tatsächlich): {dA_early_val}")
+            print(f"  Nachfrage A Last-Minute (tatsächlich): {dA_lm_val}")
             print(f"  Nachfrage B Frühbucher: {dB_early_val}")
             print(f"  Nachfrage B Last-Minute: {dB_lm_val}")
 
             # **Wichtig: Nachfrage von B hinzufügen**
             dB_early_list.append(dB_early_val)
             dB_lm_list.append(dB_lm_val)
+
+            # Speichern der tatsächlichen Nachfrage von A
+            dA_early_val_list.append(dA_early_val)
+            dA_lm_val_list.append(dA_lm_val)
 
             pB_period, soldB = compB.simple_decision(dB_early_val, dB_lm_val)
             profits_B_per_period.append(pB_period)
@@ -280,9 +351,9 @@ def run_simulation():
             fixed_cost_B_list.append(fix_cost_per_unit_B)
 
             # Marktanteile
-            total_market = (dA_early + dA_lm) + (dB_early_val + dB_lm_val)
+            total_market = (dA_early_val + dA_lm_val) + (dB_early_val + dB_lm_val)
             if total_market > 0:
-                market_share_A = (dA_early + dA_lm) / total_market
+                market_share_A = (dA_early_val + dA_lm_val) / total_market
                 market_share_B = (dB_early_val + dB_lm_val) / total_market
             else:
                 market_share_A = 0.5
@@ -322,8 +393,8 @@ def run_simulation():
         prices_A_last_list,
         production_A_list,
         inventory_A_list,
-        dA_early_list,
-        dA_lm_list,
+        dA_early_est_list,  # Geschätzte Frühbucher-Nachfrage
+        dA_lm_est_list,    # Geschätzte Last-Minute-Nachfrage
         dB_early_list,
         dB_lm_list,
         soldB_list,
@@ -336,7 +407,9 @@ def run_simulation():
         prices_B_early_list,
         prices_B_last_list,
         production_B_list,
-        inventory_B_list
+        inventory_B_list,
+        dA_early_val_list,  # Tatsächliche Frühbucher-Nachfrage
+        dA_lm_val_list     # Tatsächliche Last-Minute-Nachfrage
     )
 
     # Plots anzeigen
@@ -344,7 +417,7 @@ def run_simulation():
 
     # Daten in XLSX speichern
     data = {
-        'Periode': list(range(periods)),
+        'Periode': list(range(1, periods + 1)),
         'Gewinn_A': profits_A_per_period,
         'Gewinn_B': profits_B_per_period,
         'A_Frühbucher_Preis': prices_A_early_list,
@@ -355,17 +428,19 @@ def run_simulation():
         'Inventar_A': inventory_A_list,
         'Produktion_B': production_B_list,
         'Inventar_B': inventory_B_list,
-        'A_Frühbucher_Nachfrage': dA_early_list,
-        'A_LastMinute_Nachfrage': dA_lm_list,
+        'A_Frühbucher_Nachfrage_Geschätzt': dA_early_est_list,
+        'A_LastMinute_Nachfrage_Geschätzt': dA_lm_est_list,
+        'A_Frühbucher_Nachfrage_Tatsächlich': dA_early_val_list,
+        'A_LastMinute_Nachfrage_Tatsächlich': dA_lm_val_list,
         'B_Frühbucher_Nachfrage': dB_early_list,
         'B_LastMinute_Nachfrage': dB_lm_list,
         'Verkaufte_Menge_B': soldB_list,
         'Marktanteil_A': market_share_A_list,
         'Marktanteil_B': market_share_B_list,
-        'Var_Kosten_A/Einheit': unit_cost_A_list,
-        'Fix_Kosten_A/Einheit': fixed_cost_A_list,
-        'Var_Kosten_B/Einheit': unit_cost_B_list,
-        'Fix_Kosten_B/Einheit': fixed_cost_B_list,
+        'Var_Kosten_A_Einheit': unit_cost_A_list,
+        'Fix_Kosten_A_Einheit': fixed_cost_A_list,
+        'Var_Kosten_B_Einheit': unit_cost_B_list,
+        'Fix_Kosten_B_Einheit': fixed_cost_B_list,
     }
 
     # Überprüfen, ob alle Listen die gleiche Länge haben

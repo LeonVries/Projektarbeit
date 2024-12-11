@@ -40,16 +40,26 @@ Funktionsweise:
 class StrategyDynamic:
 
     def __init__(self, early_price_candidates=[60, 80, 100, 120, 140],
-                 last_price_candidates=[80, 120, 160, 200]):
+                 last_price_candidates=[80, 120, 160, 200],
+                 demand_uncertainty=0.1):  # 10% Unsicherheit
         self.early_price_candidates = early_price_candidates
         self.last_price_candidates = last_price_candidates
+        self.demand_uncertainty = demand_uncertainty
 
     def optimize_decision(self, company, price_B_early, price_B_last, market):
         scenarios = []
         for pe in self.early_price_candidates:
             for pl in self.last_price_candidates:
                 dA_early, dA_lm, dB_early, dB_lm = market.generate_demands(pe, price_B_early, pl, price_B_last)
-                scenarios.append((pe, pl, dA_early, dA_lm))
+                
+                # Einführung von Schätzfehlern
+                uncertainty_factor_early = np.random.uniform(1 - self.demand_uncertainty, 1 + self.demand_uncertainty)
+                uncertainty_factor_lm = np.random.uniform(1 - self.demand_uncertainty, 1 + self.demand_uncertainty)
+                
+                dA_early_est = dA_early * uncertainty_factor_early
+                dA_lm_est = dA_lm * uncertainty_factor_lm
+                
+                scenarios.append((pe, pl, dA_early_est, dA_lm_est))
 
         model = LpProblem("A_decision", LpMaximize)
         x = {i: LpVariable(f"x_{i}", cat='Binary') for i, _ in enumerate(scenarios)}
@@ -57,33 +67,34 @@ class StrategyDynamic:
         prod = LpVariable("production", lowBound=0)
         inv_end = LpVariable("inv_end", lowBound=0)
 
-        # Ensure only one scenario is chosen
+        # Sicherstellen, dass nur ein Szenario gewählt wird
         model += lpSum(x.values()) == 1
 
-        # Production cannot exceed capacity
+        # Produktionskapazität darf nicht überschritten werden
         model += prod <= company.capacity
 
-        # For each scenario, ensure demand can be met
+        # Nachfrage decken für das gewählte Szenario
         for i, sc in enumerate(scenarios):
-            pe, pl, dA_early, dA_lm = sc
-            total_demand = dA_early + dA_lm
+            pe, pl, dA_early_est, dA_lm_est = sc
+            total_demand = dA_early_est + dA_lm_est
             model += total_demand * x[i] <= company.inventory + prod
 
-        # Inventory constraints
+        # Lagerbestands-Beschränkungen
         total_demand_expr = lpSum([x[i] * (scenarios[i][2] + scenarios[i][3]) for i in range(len(scenarios))])
         model += inv_end == company.inventory + prod - total_demand_expr
         model += inv_end >= company.buffer_stock
 
-        # Revenue and Cost expressions
+        # Einnahmen und Kosten
         revenue_expr = lpSum([x[i] * (scenarios[i][2] * scenarios[i][0] + scenarios[i][3] * scenarios[i][1]) for i in range(len(scenarios))])
         cost_expr = company.cost.fixed_cost + prod * (company.cost.total_unit_cost()) + inv_end * (company.cost.inventory_holding_cost)
 
+        # Zielfunktion: Gewinn maximieren
         model += revenue_expr - cost_expr
 
-        # Solve the model
+        # Modell lösen
         model.solve()
 
-        # Find chosen scenario
+        # Gewähltes Szenario identifizieren
         chosen = None
         for i in x:
             if x[i].varValue > 0.5:
@@ -91,15 +102,17 @@ class StrategyDynamic:
                 break
 
         if chosen is not None:
-            pe, pl, dA_early, dA_lm = scenarios[chosen]
+            pe, pl, dA_early_est, dA_lm_est = scenarios[chosen]
             chosen_prod = prod.varValue
             chosen_inv = inv_end.varValue
-            profit = revenue_expr.value() - cost_expr.value()
-            return pe, pl, chosen_prod, chosen_inv, profit, dA_early, dA_lm
+            # Berechnung des Gewinns basierend auf den geschätzten Nachfragen
+            revenue = scenarios[chosen][2] * scenarios[chosen][0] + scenarios[chosen][3] * scenarios[chosen][1]
+            cost = company.cost.fixed_cost + chosen_prod * company.cost.total_unit_cost() + chosen_inv * company.cost.inventory_holding_cost
+            profit = revenue - cost
+            return pe, pl, chosen_prod, chosen_inv, profit, dA_early_est, dA_lm_est
         else:
-            # Fallback falls kein Szenario gewählt wird
+            # Fallback, falls kein Szenario gewählt wird
             return company.base_price, 100, 0, company.inventory, 0, 0, 0
-
 
 class StrategyStatic:
 
