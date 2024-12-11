@@ -10,7 +10,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
 ## 📝 Inhaltsverzeichnis
 
 - [Einleitung](#einleitung)
-  - [Projektstruktur nach VDI 3633](#projektstruktur-nach-vdi-3633)
 - [Ausgangssituation und Ziel](#ausgangssituation-und-ziel)
   - [Ausgangssituation](#ausgangssituation)
   - [Ziel](#ziel)
@@ -32,9 +31,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
     - [Mathematische Grundlagen](#mathematische-grundlagen)
       - [Lineare Nachfragefunktion](#lineare-nachfragefunktion)
     - [Simulationsparameter](#simulationsparameter)
-    - [Potenzielle Erweiterungen und Forschungsrichtungen](#potenzielle-erweiterungen-und-forschungsrichtungen)
-    - [Anforderungen](#anforderungen)
-    - [Nutzung](#nutzung)
       - [Beispielcode](#beispielcode)
     - [Implementierung der Klassen](#implementierung-der-klassens)
       - [1. Company Klasse (company.py)](#1-company-klasse-companypy)
@@ -42,18 +38,13 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
       - [3. Simulation Klasse (simulation.py)](#3-simulation-klasse-simulationpy)
   - [Evolutionsstufe 1: Erweiterte Wettbewerbsmarktsimulation](#evolutionsstufe-1-erweiterte-wettbewerbsmarktsimulation)
     - [Übersicht](#übersicht)
-    - [Wissenschaftlicher Hintergrund](#wissenschaftlicher-hintergrund)
       - [Erweiterung des Bertrand-Wettbewerbsmodells](#erweiterung-des-bertrand-wettbewerbsmodells)
     - [Projektstruktur](#projektstruktur-1)
       - [Klassenübersicht](#klassenübersicht)
-      - [Vergleichsanalyse](#vergleichsanalyse)
       - [Simulationsdynamik](#simulationsdynamik)
-    - [Visualisierung](#visualisierung-1)
     - [Implementierung der erweiterten Klassen](#implementierung-der-erweiterten-klassens)
   - [Evolutionsstufe 2: Dynamisches Preis- und Produktionsoptimierungsmodell](#evolutionsstufe-2-dynamisches-preis--und-produktionsoptimierungsmodell)
     - [Übersicht](#übersicht-1)
-    - [Theoretischer Hintergrund](#theoretischer-hintergrund-1)
-      - [Wissenschaftliche Innovation: Dynamische Produktionsslot-Planung](#wissenschaftliche-innovation-dynamische-produktionsslot-planung)
       - [Probabilistische Nachfragemodellierung](#probabilistische-nachfragemodellierung)
     - [Systemarchitektur](#systemarchitektur)
       - [Kernkomponenten](#kernkomponenten)
@@ -68,7 +59,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
     - [Mathematische Grundlagen](#mathematische-grundlagen-1)
       - [Marktanteilsberechnung](#marktanteilsberechnung)
       - [Nachfragemodell](#nachfragemodell)
-    - [Schlüsselinnovationen](#schlüsselinnovationen)
     - [Leistungskennzahlen](#leistungskennzahlen)
     - [Nutzung](#nutzung-1)
       - [Voraussetzungen](#voraussetzungen)
@@ -81,10 +71,6 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
   - [Interaktion zwischen Komponenten](#interaktion-zwischen-komponenten)
   - [Datenfluss](#datenfluss)
   - [Abhängigkeiten](#abhängigkeiten)
-  - [UML-Diagramm Hinweis](#uml-diagramm-hinweis)
-- [Installation](#installation)
-- [Nutzung](#nutzung-2)
-  - [Beispielcode](#beispielcode-1)
 - [Lizenz](#lizenz)
 - [Beitragende](#beitragende)
 - [Kontakt](#kontakt)
@@ -93,28 +79,7 @@ Eine Python-Implementierung eines dynamischen Bertrand-Duopol Modells mit gradue
 
 ## 🎯 Überblick
 
-Dieses Projekt zielt darauf ab, umfassende und erweiterte Modelle des Bertrand-Wettbewerbs zu entwickeln und zu simulieren. Der Projektaufbau orientiert sich an der VDI-Richtlinie 3633, welche eine strukturierte Vorgehensweise für technische Projekte bietet. Durch die Durcharbeitung von drei Evolutionsstufen wird eine zunehmende Komplexität und Realitätsnähe der Modelle erreicht, um realistische Marktbedingungen und strategische Interaktionen zwischen Unternehmen zu simulieren.
-
-### 📦 Projektstruktur nach VDI 3633
-
-Die VDI 3633 unterteilt Projekte in mehrere Phasen, die hier adaptiert wurden:
-
-1. **Projektdefinition**
-   - Zielsetzung
-   - Anforderungen
-   - Rahmenbedingungen
-2. **Konzeptentwicklung**
-   - Erstellung der Roadmap
-   - Modellierung der Evolutionsstufen
-3. **Umsetzung**
-   - Implementierung der Modelle
-   - Integration der Komponenten
-   - Test und Validierung
-     - Simulationen durchführen
-     - Ergebnisse analysieren
-4. **Dokumentation und Abschluss**
-   - Erstellung der Dokumentation
-   - Abschlussbericht
+Dieses Projekt zielt darauf ab, umfassende und erweiterte Modelle des Bertrand-Wettbewerbs zu entwickeln und zu simulieren. Der Fokus liegt auf der Maximierung des Gewinns durch dynamische Preisstrategien, die die Produktionsauslastung optimieren. Der Projektaufbau orientiert sich an der VDI-Richtlinie 3633, welche eine strukturierte Vorgehensweise für technische Projekte bietet. Durch die Durcharbeitung von drei Evolutionsstufen wird eine zunehmende Komplexität und Realitätsnähe der Modelle erreicht, um realistische Marktbedingungen und strategische Interaktionen zwischen Unternehmen zu simulieren.
 
 ## 🎯 Ausgangssituation und Ziel
 
@@ -124,7 +89,7 @@ Das klassische Bertrand-Wettbewerbsmodell beschreibt den Preiswettbewerb zwische
 
 ### Ziel
 
-Ziel dieses Projekts ist es, das klassische Bertrand-Modell zu erweitern und zu verfeinern, um realistischere Marktbedingungen und strategische Interaktionen zwischen Unternehmen zu simulieren. Dies umfasst die Einführung dynamischer Preisadjustierungen, realitätsnaher Marktanteilsverteilungen und die Berücksichtigung stochastischer Elemente in der Nachfrage- und Kostenstruktur. Durch die schrittweise Entwicklung in drei Evolutionsstufen soll eine umfassende und flexible Simulationsumgebung geschaffen werden.
+Ziel ist die Entwicklung einer dynamischen Preisstrategie zur Maximierung des Gewinns durch optimale Steuerung der Produktionsauslastung. Günstige Preise sollen in Zeiten niedriger Nachfrage freie Kapazitäten füllen, um Fixkosten zu amortisieren und Verluste zu minimieren, während bei hoher Nachfrage Premiumpreise zusätzliche Gewinne abschöpfen. Durch die Berücksichtigung stochastischer Nachfrage- und Kostenfaktoren wird eine datengetriebene Entscheidungsgrundlage geschaffen, um Kapazitäten effizient auszunutzen und langfristige Profitabilität sicherzustellen.
 
 ## Projekt-Roadmap
 
@@ -269,25 +234,6 @@ Im bereitgestellten Beispiel:
 - Kreuzpreisempfindlichkeit (\( \gamma \)): 5
 - Grenzkosten: 20
 
-#### Potenzielle Erweiterungen und Forschungsrichtungen
-
-- Einführung von Produktdifferenzierung
-- Implementierung dynamischer Preisstrategien
-- Hinzufügen von Nachfrageschwankungen
-- Modellierung von Kapazitätsbeschränkungen
-- Untersuchung von Lernalgorithmen in Wettbewerbsumgebungen
-
-#### Anforderungen
-
-- Python 3.8+
-- NumPy
-- Matplotlib
-
-#### Nutzung
-
-```bash
-python simulation.py
-```
 
 ##### Beispielcode
 
@@ -382,8 +328,6 @@ class Simulation:
 
 In der ersten Evolutionsstufe wird das grundlegende Markt-Simulationsmodell erweitert, um dynamische Preisadjustierungen, realistischere Marktanteilsberechnungen und eine Vergleichsanalyse zwischen dem klassischen und dem erweiterten Bertrand-Modell zu integrieren. Diese Erweiterungen ermöglichen eine differenziertere Analyse der strategischen Interaktionen und des Marktverhaltens.
 
-#### Wissenschaftlicher Hintergrund
-
 ##### Erweiterung des Bertrand-Wettbewerbsmodells
 
 Während das klassische Bertrand-Modell statische Preisstrategien und einfache Marktanteilsberechnungen verwendet, integriert die erste Evolutionsstufe dynamische Elemente, um realistischere Marktbedingungen abzubilden. Dies beinhaltet:
@@ -428,18 +372,6 @@ Während das klassische Bertrand-Modell statische Preisstrategien und einfache M
      - `run()`: Führt die Simulation durch, berechnet die Gleichgewichte und visualisiert die Reaktionsfunktionen.
      - `plot_reaction_functions(equilibrium_prices)`: Erstellt die Visualisierung der Reaktionsfunktionen und markiert das Nash-Gleichgewicht.
 
-##### Vergleichsanalyse
-
-Die Vergleichsanalyse zwischen dem klassischen und dem erweiterten Bertrand-Modell erfolgt in dieser Evolutionsstufe und umfasst folgende Aspekte:
-
-| **Aspekt**        | **Klassisches Modell**          | **Erweitertes Modell**                            |
-|-------------------|----------------------------------|---------------------------------------------------|
-| Marktzuweisung    | Binär (Gewinner nimmt alles)     | Kontinuierlich mit logistischer Funktion          |
-| Preisadjustierung | Statisch                         | Dynamisch (Anpassungen pro Zyklus)                |
-| Nash-Gleichgewicht| Einmalige Berechnung             | Iterative Annäherung über Zeit                    |
-| Marktdynamik      | Statisch                         | Dynamische zeitliche Entwicklung                 |
-| Realismus         | Gering                           | Höher durch realistische Annahmen                |
-
 #### Simulationsdynamik
 
 - **Dynamische Preisadjustierung:**  
@@ -447,13 +379,6 @@ Die Vergleichsanalyse zwischen dem klassischen und dem erweiterten Bertrand-Mode
 
 - **Kontinuierliche Marktanteilszuweisung:**  
   Anstelle einer binären Zuweisung wird eine logistische Funktion verwendet, um die Marktanteile kontinuierlich und realitätsnah zu verteilen. Dies vermeidet den "Gewinner nimmt alles"-Ansatz und reflektiert die tatsächliche Marktaufteilung besser.
-
-- **Vergleich der Modelle:**  
-  Durch die Integration dynamischer Elemente und kontinuierlicher Marktanteilszuweisungen können Unterschiede im Verhalten und den Ergebnissen zwischen dem klassischen und dem erweiterten Modell analysiert werden. Dies bietet wertvolle Einblicke in die strategische Interdependenz und die Marktdynamik.
-
-#### Visualisierung
-
-Die Simulation erstellt eine grafische Darstellung der Reaktionsfunktionen beider Firmen und markiert das Nash-Gleichgewicht, was ein klares Verständnis der strategischen Interaktionen ermöglicht.
 
 #### Implementierung der erweiterten Klassen
 
@@ -772,19 +697,6 @@ $$
 Q_i = market\_size \times \left(1 - \frac{max\_price}{p_i}\right)
 $$
 
-#### Schlüsselinnovationen
-
-- **Dynamische Kapazitätszuweisung:**  
-  Produktionskapazität ist nicht fest, sondern wird dynamisch angepasst.  
-  Preise dienen als Steuermechanismus für die Kapazitätsauslastung.
-
-- **Stochastische Optimierung:**  
-  Verwendung der linearen Programmierung für die Szenarienauswahl.  
-  Berücksichtigung von Unsicherheiten in den Marktbedingungen.
-
-- **Mehrsegment-Marktmodellierung:**  
-  Unterscheidung zwischen Frühbuchungs- und Last-Minute-Segmenten.  
-  Unterschiedliche Preisempfindlichkeiten für jedes Segment.
 
 #### Leistungskennzahlen
 
@@ -804,11 +716,6 @@ $$
 - Matplotlib
 - PuLP (Lineare Programmierung)
 
-##### Simulation Ausführen
-
-```bash
-python simulation.py
-```
 
 ##### Visualisierung
 
@@ -830,11 +737,13 @@ Die Simulation generiert zwei umfassende Visualisierungen:
 - Anpassbare Preisstrategien.
 - Variable Marktgrößenparameter.
 
-#### Zukünftige Forschungsrichtungen
+#### Zukünftige Erweiterungen
 
-- Maschinelles Lernen zur Nachfrageprognose
+- Maschinelles Lernen zur Nachfrageprognose anstelle von der gegebenen Nachfragekurve für die Simulation
 - Erweiterung auf Mehrfirmen-Szenarien
 - Entwicklung von Echtzeit-Adaptivpreismechanismen
+- Erweiterung der Kosten-, Nachfrage-Attribute
+
 
 #### Einschränkungen
 
@@ -875,21 +784,6 @@ Die verschiedenen Klassen und Module interagieren wie folgt:
 - Strategy Klassen sind abhängig von Company und Market Klassen, um fundierte Preisentscheidungen zu treffen.
 - Simulation Klasse ist die orchestrierende Einheit, die alle anderen Komponenten integriert und koordiniert.
 
-### UML-Diagramm Hinweis
-
-Für die Erstellung eines UML-Diagramms können die Klassen, ihre Attribute und Methoden sowie die Beziehungen (Assoziationen, Aggregationen, Abhängigkeiten) entsprechend den detaillierten Beschreibungen modelliert werden. Achten Sie besonders auf die Assoziationen zwischen Market und Company Klassen sowie die Abhängigkeiten der Strategy Klassen von den Company Klassen.
-
-## Installation
-
-```bash
-git clone https://github.com/IhrBenutzername/market-simulation
-cd market-simulation
-pip install -r requirements.txt
-python simulation.py
-```
-
-## Nutzung
-
 ### Beispielcode
 
 ```python
@@ -910,10 +804,6 @@ simulation.run()
 ## Lizenz
 
 MIT Lizenz
-
-## Beitragende
-
-Beiträge sind willkommen! Bitte lesen Sie [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Kontakt
 
