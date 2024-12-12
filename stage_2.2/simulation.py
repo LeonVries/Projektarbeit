@@ -14,16 +14,19 @@ def plot_results(results, companyA_capacity, companyB_capacity):
         dB_early_list, dB_lm_list, soldB_list, market_share_A_list, market_share_B_list,
         unit_cost_A_list, fixed_cost_A_list, unit_cost_B_list, fixed_cost_B_list,
         prices_B_early_list, prices_B_last_list, production_B_list, inventory_B_list,
-        dA_early_val_list, dA_lm_val_list, actual_sales_A_list
+        dA_early_val_list, dA_lm_val_list, actual_sales_A_list,
+        dB_early_est_list, dB_lm_est_list, total_demand_list,
+        oee_A_list, oee_B_list
     ) = results
 
     cumulative_profit_A = np.cumsum(profits_A_per_period)
     cumulative_profit_B = np.cumsum(profits_B_per_period)
-    oee_A = np.array(production_A_list) / companyA_capacity
-    oee_B = np.array(production_B_list) / companyB_capacity
+    oee_A = np.array(oee_A_list)
+    oee_B = np.array(oee_B_list)
 
     # Verkäufe von A = actual_sales_A_list
     soldA_list = actual_sales_A_list
+
 
     # Erster Tab
     plt.figure(figsize=(20, 18))
@@ -274,10 +277,21 @@ def run_simulation():
     production_B_list = []
     inventory_B_list = []
 
-    # Listen für tatsächliche Nachfrage von A
+    # Listen für tatsächliche Nachfrage von A und B
     dA_early_val_list = []
     dA_lm_val_list = []
     actual_sales_A_list = []
+
+    # Listen für geschätzte Nachfrage von B
+    dB_early_est_list = []
+    dB_lm_est_list = []
+
+    # Liste für Gesamtnachfrage
+    total_demand_list = []
+
+    # Listen für Auslastung (OEE)
+    oee_A_list = []
+    oee_B_list = []
 
     # Initial Preis für B
     compB.base_price = 100  # Startpreis
@@ -312,7 +326,7 @@ def run_simulation():
             if pl == 0:
                 print(f"  Warnung: Last-Minute Preis (pl) in Periode {t+1} ist 0.")
 
-            # Speichern der geschätzten Daten
+            # Speichern der geschätzten Daten für A
             dA_early_est_list.append(dA_early_est)
             dA_lm_est_list.append(dA_lm_est)
             production_A_list.append(prodA)
@@ -365,11 +379,15 @@ def run_simulation():
             profitA += profitA_period
 
             # Unternehmen B trifft Entscheidung basierend auf tatsächlicher Nachfrage mit Unsicherheit
-            pB_period, productionB, soldB = compB.simple_decision(dB_early_val, dB_lm_val)
+            pB_period, productionB, soldB, dB_early_est, dB_lm_est = compB.simple_decision(dB_early_val, dB_lm_val)
             profits_B_per_period.append(pB_period)
             profitB += pB_period
             soldB_list.append(soldB)
             production_B_list.append(productionB)
+
+            # Speichern der geschätzten Nachfrage für B
+            dB_early_est_list.append(dB_early_est)
+            dB_lm_est_list.append(dB_lm_est)
 
             # B's Inventar aktualisieren
             inventory_B_list.append(compB.inventory)
@@ -378,8 +396,10 @@ def run_simulation():
             unit_cost_B_list.append(unit_cost_B)
             fixed_cost_B_list.append(fix_cost_per_unit_B)
 
-            # Marktanteile
+            # Marktanteile berechnen und speichern
             total_market = actual_demand_A + (dB_early_val + dB_lm_val)
+            total_demand_list.append(total_market)  # Gesamtnachfrage speichern
+
             if total_market > 0:
                 market_share_A = actual_demand_A / total_market
                 market_share_B = (dB_early_val + dB_lm_val) / total_market
@@ -389,6 +409,12 @@ def run_simulation():
 
             market_share_A_list.append(market_share_A)
             market_share_B_list.append(market_share_B)
+
+            # Auslastung (OEE) berechnen und speichern
+            oee_A = prodA / compA.capacity
+            oee_B = productionB / compB.capacity
+            oee_A_list.append(oee_A)
+            oee_B_list.append(oee_B)
 
             # Debugging: Fixkosten pro Einheit
             print(f"  Fixkosten pro Einheit A: {fix_cost_per_unit_A}")
@@ -438,7 +464,12 @@ def run_simulation():
         inventory_B_list,
         dA_early_val_list,  # Tatsächliche Frühbucher-Nachfrage
         dA_lm_val_list,     # Tatsächliche Last-Minute-Nachfrage
-        actual_sales_A_list  # Tatsächliche Verkäufe A
+        actual_sales_A_list,  # Tatsächliche Verkäufe A
+        dB_early_est_list,  # Geschätzte Frühbucher-Nachfrage B
+        dB_lm_est_list,     # Geschätzte Last-Minute-Nachfrage B
+        total_demand_list,  # Gesamtnachfrage
+        oee_A_list,         # Auslastung A
+        oee_B_list          # Auslastung B
     )
 
     # Plots anzeigen
@@ -461,12 +492,17 @@ def run_simulation():
         'A_LastMinute_Nachfrage_Geschätzt': dA_lm_est_list,
         'A_Frühbucher_Nachfrage_Tatsächlich': dA_early_val_list,
         'A_LastMinute_Nachfrage_Tatsächlich': dA_lm_val_list,
-        'B_Frühbucher_Nachfrage': dB_early_list,
-        'B_LastMinute_Nachfrage': dB_lm_list,
+        'B_Frühbucher_Nachfrage_Tatsächlich': dB_early_list,
+        'B_LastMinute_Nachfrage_Tatsächlich': dB_lm_list,
+        'B_Frühbucher_Nachfrage_Geschätzt': dB_early_est_list,
+        'B_LastMinute_Nachfrage_Geschätzt': dB_lm_est_list,
         'Verkaufte_Menge_A': actual_sales_A_list,
         'Verkaufte_Menge_B': soldB_list,
         'Marktanteil_A': market_share_A_list,
         'Marktanteil_B': market_share_B_list,
+        'Gesamtnachfrage': total_demand_list,
+        'OEE_A': oee_A_list,
+        'OEE_B': oee_B_list,
         'Var_Kosten_A_Einheit': unit_cost_A_list,
         'Fix_Kosten_A_Einheit': fixed_cost_A_list,
         'Var_Kosten_B_Einheit': unit_cost_B_list,

@@ -28,6 +28,8 @@ class CompanyDynamic:
 # Firma B statisch (Aktualisiert zur Berücksichtigung von Nachfrageschwankungen)
 # company.py
 
+# company.py
+
 class CompanyStatic:
     def __init__(self, name, capacity, cost, base_price, inventory=0, buffer_stock=20, demand_uncertainty=0.1):
         self.name = name
@@ -72,7 +74,8 @@ class CompanyStatic:
         # Berechnung des Gewinns
         profit = revenue - total_cost
 
-        return profit, production, sales
+        return profit, production, sales, dB_early_est, dB_lm_est  # Rückgabe der geschätzten Nachfragen
+
 
     def adjust_price(self, strategy, competitor_price):
         # Strategie für B aufrufen, um den Preis anzupassen
