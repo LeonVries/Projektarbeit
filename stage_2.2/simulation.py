@@ -1,3 +1,4 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -234,19 +235,19 @@ def plot_results(results, companyA_capacity, companyB_capacity):
 
 def run_simulation():
     # Initialisieren der Kostenstrukturen
-    costA = Cost(fixed_cost=10000, marginal_cost=30, raw_material_price=15, inventory_holding_cost=2)
-    costB = Cost(fixed_cost=10000, marginal_cost=30, raw_material_price=15, inventory_holding_cost=2)
+    costA = Cost(fixed_cost=15000, marginal_cost=30, raw_material_price=15, inventory_holding_cost=2)
+    costB = Cost(fixed_cost=15000, marginal_cost=30, raw_material_price=15, inventory_holding_cost=2)
 
     # Initialisieren der Unternehmen
     # Einheitliche Pufferbestände: 20 +/- Variation
-    compA = CompanyDynamic(name='A', capacity=550, cost=costA, base_price=100, inventory=0, buffer_stock=200, demand_uncertainty=0.1)
-    compB = CompanyStatic(name='B', capacity=550, cost=costB, base_price=100, inventory=0, buffer_stock=200, demand_uncertainty=0.1)
+    compA = CompanyDynamic(name='A', capacity=550, cost=costA, base_price=100, inventory=0, buffer_stock=20, demand_uncertainty=0.1)
+    compB = CompanyStatic(name='B', capacity=550, cost=costB, base_price=100, inventory=0, buffer_stock=20, demand_uncertainty=0.1)
 
     # Initialisieren des Marktes
     market = Market()
 
     # Initialisieren der Strategien
-    strategyA = StrategyDynamic()
+    strategyA = StrategyDynamic() 
     strategyB = StrategyStatic()
 
     periods = 30

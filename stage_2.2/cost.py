@@ -9,7 +9,7 @@ import numpy as np
 # cost.py
 
 class Cost:
-    def __init__(self, fixed_cost, marginal_cost, raw_material_price=10, inventory_holding_cost=2):
+    def __init__(self, fixed_cost, marginal_cost, raw_material_price, inventory_holding_cost):
         self.fixed_cost = fixed_cost
         self.marginal_cost = marginal_cost
         self.raw_material_price = raw_material_price

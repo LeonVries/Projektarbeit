@@ -29,7 +29,7 @@ class CompanyDynamic:
 # Firma B statisch (Aktualisiert zur Berücksichtigung von Nachfrageschwankungen)
 
 class CompanyStatic:
-    def __init__(self, name, capacity, cost, base_price, inventory=0, buffer_stock=20, demand_uncertainty=0.1):
+    def __init__(self, name, capacity, cost, base_price, inventory, buffer_stock, demand_uncertainty):
         self.name = name
         self.capacity = capacity
         self.cost = cost

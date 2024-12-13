@@ -80,7 +80,7 @@ class StrategyDynamic:
 
 # Unternehmen B: StrategyStatic
 class StrategyStatic:
-    def __init__(self, max_adjustment=0.05):
+    def __init__(self, max_adjustment=0.15):
         self.max_adjustment = max_adjustment  # maximale Anpassung (z.B. 5%)
 
     def adjust_price(self, own_price, competitor_price, marginal_cost):
