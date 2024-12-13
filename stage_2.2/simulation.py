@@ -246,7 +246,7 @@ def run_simulation():
     market = Market()
 
     # Initialisieren der Strategien
-    strategyA = StrategyDynamic(demand_uncertainty=0.1)  # 10% Unsicherheit
+    strategyA = StrategyDynamic()
     strategyB = StrategyStatic()
 
     periods = 30

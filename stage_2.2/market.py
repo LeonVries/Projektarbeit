@@ -7,8 +7,8 @@ import numpy as np
 
 class Market:
     def __init__(self, 
-                 early_price_sensitivity=3.0, 
-                 last_minute_base_sensitivity=1.0, 
+                 early_price_sensitivity=4.0, 
+                 last_minute_base_sensitivity=1.5, 
                  early_ratio=0.8, 
                  last_minute_ratio=0.2,
                  market_size_mean=1000,
